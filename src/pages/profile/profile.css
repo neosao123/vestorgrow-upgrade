@@ -1,0 +1,58 @@
+.edit_btn,
+.edit_btnImg {
+  cursor: pointer;
+}
+
+.profileContent .page_link {
+  padding: 10px 40px;
+}
+
+.profileContent .page_link .nav-pills .nav-link {
+  color: #000000;
+  background-color: #ffffff;
+  font-weight: 600;
+  padding: 0.375rem 1.5rem 0.375rem 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profileContent .page_link .nav-pills .nav-link.active {
+  color: #00808b;
+  background-color: #ffffff;
+}
+
+#about h6.card-section-title,
+#groups h6.card-section-title {
+  font-weight: 600;
+  padding: 1rem 1rem 1rem 0;
+  border-bottom: 0.5px solid #c8c8c8;
+  margin-bottom: 1rem;
+}
+
+#about .card-body,
+#groups .card-body {
+  padding: 1.5rem;
+}
+
+#about .abt-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.suggested-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 0.5rem 0;
+  border-bottom: 0.5px solid #c8c8c8;
+  margin-bottom: 1rem;
+}
+
+.suggested-header h6.card-title {
+  font-weight: 600;
+}
+
+.suggested-header .see-all-link {
+  color: #00808b;
+  font-weight: 600;
+}

@@ -1,0 +1,20 @@
+.messageLeftHeader {
+  padding: 0.375rem 0.75rem;
+  border-bottom: 1px solid #00000054;
+}
+
+.messageHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.messageHeading h4 {
+  font-size: 1.2rem;
+}
+
+.messageChatLeftHeadSearch {
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 0.5rem;
+}

@@ -1,0 +1,87 @@
+.group-list {
+  display: grid;
+  column-gap: 5px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.group {
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0.25rem;
+  position: relative;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.group .group-logo {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
+}
+
+.group .group-title {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group .group-logo img {
+  border-radius: 50%;
+  width: 100%;
+}
+
+.group .group-title {
+  font-size: 14px;
+}
+
+.group:first-child,
+.group:last-child {
+  border-left: none;
+}
+
+.group .group-btn {
+  border: none;
+  padding: 5px 15px;
+  width: 100px;
+  border-radius: 20px;
+  color: #ffffff;
+}
+
+.group .group-btn.join-btn {
+  background-color: #00808b;
+}
+
+.group .group-btn.join-btn:hover {
+  background-color: #000000;
+}
+
+.group .group-btn.member-btn {
+  background-color: #000000;
+}
+
+.group .group-btn.member-btn:hover {
+  background-color: #00808b;
+}
+
+@media (min-width: 601px) and (max-width: 991px) {
+  .group-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .group-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 441px) {
+  .group-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
