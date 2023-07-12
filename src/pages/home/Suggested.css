@@ -99,7 +99,7 @@
     font-weight: 600;
     background: none;
     outline: none;
-    padding: 0.2rem 0.5rem;
+    padding: 0.2rem 1rem;
     border: 0;
 }
 
@@ -110,6 +110,13 @@
 
 .active-tab {
     color: #00808B;
+}
+
+.suggest-load {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .suggestionModalBody {
@@ -175,9 +182,9 @@
         height: 20vh;
     }
 
-    .profileBox {
+    .suggestionBox .profileBox {
         width: 100px;
-        height: 130px;
+        height: 120px;
         padding-bottom: 20px;
     }
 
@@ -194,7 +201,7 @@
 
     .suggestionModalBody .profileBox {
         width: 240px;
-        height: 140px;
+        height: 120px;
 
     }
 
@@ -213,7 +220,7 @@
 
     .suggestionModalBody .profileBox {
         width: 290px;
-        height: 165px;
+        height: 155px;
 
     }
 

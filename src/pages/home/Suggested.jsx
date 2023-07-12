@@ -4,6 +4,7 @@ import SuggestedService from "../../services/suggestedService";
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import UserFollowerService from "../../services/userFollowerService";
+import Loader from "../../components/Loader";
 function Suggested() {
   const suggestedServ = new SuggestedService();
   const followerServ = new UserFollowerService();
@@ -16,10 +17,10 @@ function Suggested() {
     tab: "trending_people",
   });
   const [search, setSearch] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const suggestTabBtn = [
     { key: 1, tab: "trending_people", value: "Trending People" },
-    { key: 2, tab: "you_may_now", value: "People You May Know" },
+    { key: 2, tab: "you_may_know", value: "People You May Know" },
     { key: 3, tab: "new", value: "New to VestorGrow" },
   ];
 
@@ -37,9 +38,11 @@ function Suggested() {
     }
   };
   const getSuggestedTab = async () => {
+    setLoading(true);
     try {
       let res = await suggestedServ.suggestListTab(tabRequest);
       setsuggestedTab(res.users);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -78,7 +81,14 @@ function Suggested() {
       <div className="suggestionBox ">
         <div className="suggestionHead">
           <span>Suggested for You</span>
-          <span onClick={() => setModalShow(true)}>See All</span>
+          <span
+            onClick={() => {
+              setModalShow(true);
+              setSearch("");
+            }}
+          >
+            See All
+          </span>
         </div>
         <div className="suggestionBody">
           {suggestedHome?.slice(0, 2).map((user) => {
@@ -133,7 +143,10 @@ function Suggested() {
       {/* MODAL FOR SUGGESTED USER */}
       <Modal
         show={modalShow}
-        onHide={() => setModalShow(false)}
+        onHide={() => {
+          setModalShow(false);
+          setSearch("");
+        }}
         size="xl"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -173,77 +186,72 @@ function Suggested() {
           })}
         </Modal.Header>
         <Modal.Body>
-          <div className="suggestionModalBody">
-            {filteredSuggested?.length === 0
-              ? "No users Found"
-              : filteredSuggested?.map((user) => {
-                  return (
-                    <>
-                      <div className="profileBox">
-                        <Link to={"/userprofile/" + user?._id}>
-                          <div className="profile-image">
-                            <img src={user.profile_img} alt="profile" />
-                          </div>
-                          <div className="profile-content">
-                            <span className="name">
-                              {user?.user_name?.length > 18
-                                ? user?.user_name?.slice(0, 18) + "..."
-                                : user.user_name}
-                            </span>
-                            <span className="title">
-                              {user?.title?.length > 18
-                                ? user?.title?.slice(0, 18) + "..."
-                                : user.title}
-                            </span>
-                            <span className="followers">
-                              {user.followers} Followers
-                            </span>
-                          </div>
-                        </Link>
-                        <div className="suggst-btns">
-                          <button
-                            className="skip"
-                            onClick={() => deleteSuggested(user._id)}
-                          >
-                            Skip
-                          </button>
-                          {user.isFollowing === "following" ? (
-                            <button className="follow">Following</button>
-                          ) : user.isFollowing === "requested" ? (
-                            <button className="follow">Requested</button>
-                          ) : (
-                            <button
-                              className="follow"
-                              onClick={() => {
-                                handleFollowRequest(user._id);
-                              }}
-                            >
-                              Follow
-                            </button>
-                          )}
+          <div
+            className="suggestionModalBody"
+            style={{ overflowY: loading ? "hidden" : "scroll" }}
+          >
+            {loading ? (
+              // Display loader while loading is true
+              <div className="suggest-load">
+                <Loader />
+              </div>
+            ) : filteredSuggested?.length === 0 ? (
+              "No users Found"
+            ) : (
+              filteredSuggested?.map((user) => {
+                return (
+                  <>
+                    <div className="profileBox">
+                      <Link to={"/userprofile/" + user?._id}>
+                        <div className="profile-image">
+                          <img src={user.profile_img} alt="profile" />
                         </div>
+                        <div className="profile-content">
+                          <span className="name">
+                            {user?.user_name?.length > 18
+                              ? user?.user_name?.slice(0, 18) + "..."
+                              : user.user_name}
+                          </span>
+                          <span className="title">
+                            {user?.title?.length > 18
+                              ? user?.title?.slice(0, 18) + "..."
+                              : user.title}
+                          </span>
+                          <span className="followers">
+                            {user.followers} Followers
+                          </span>
+                        </div>
+                      </Link>
+                      <div className="suggst-btns">
+                        <button
+                          className="skip"
+                          onClick={() => deleteSuggested(user._id)}
+                        >
+                          Skip
+                        </button>
+                        {user.isFollowing === "following" ? (
+                          <button className="follow">Following</button>
+                        ) : user.isFollowing === "requested" ? (
+                          <button className="follow">Requested</button>
+                        ) : (
+                          <button
+                            className="follow"
+                            onClick={() => {
+                              handleFollowRequest(user._id);
+                            }}
+                          >
+                            Follow
+                          </button>
+                        )}
                       </div>
-                    </>
-                  );
-                })}
+                    </div>
+                  </>
+                );
+              })
+            )}
           </div>
         </Modal.Body>
       </Modal>
-      <div
-        className="modal fade"
-        id="suggestedModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-          <div className="modal-content">
-            <div className="modal-header"></div>
-            <div className="modal-header button-header"></div>
-            <div className="modal-body"></div>
-          </div>
-        </div>
-      </div>
     </>
   );
 }
