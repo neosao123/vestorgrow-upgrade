@@ -9,7 +9,12 @@ export default class DiscoverService {
         }
         return object;
       }, {});
-      return await util.sendApiRequest("/discover/list", "POST", true, category);
+      return await util.sendApiRequest(
+        "/discover/list",
+        "POST",
+        true,
+        category
+      );
     } catch (err) {
       throw err;
     }
@@ -18,6 +23,13 @@ export default class DiscoverService {
   async getPost(id) {
     try {
       return await util.sendApiRequest("/discover/" + id, "GET", true);
+    } catch (err) {
+      throw err;
+    }
+  }
+  async getPopularTags() {
+    try {
+      return await util.sendApiRequest("/discover/popular/keywords", "GET");
     } catch (err) {
       throw err;
     }
