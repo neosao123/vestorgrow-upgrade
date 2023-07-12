@@ -123,12 +123,11 @@
     width: 100%;
     height: 72vh;
     column-gap: 15px;
-    row-gap: 15px;
     padding: 0 25px 0 25px;
     display: flex;
-    align-items: flex-start;
     flex-wrap: wrap;
     overflow-y: scroll;
+    align-content: flex-start;
 }
 
 .suggestionModalBody .profileBox {
