@@ -123,6 +123,7 @@ function Suggested() {
                     </button>
                   )}{" "}
                 </div>
+                <div className="border" style={{ height: "130px" }}></div>
               </>
             );
           })}
@@ -156,7 +157,7 @@ function Suggested() {
             />
           </div>
         </Modal.Header>
-        <Modal.Header className="button-header">
+        <Modal.Header className="button-header" style={{ borderBottom: "0" }}>
           {suggestTabBtn.map((tab) => {
             return (
               <>
@@ -180,23 +181,24 @@ function Suggested() {
                     <>
                       <div className="profileBox">
                         <Link to={"/userprofile/" + user?._id}>
-                          <img src={user.profile_img} alt="profile" />
-                          <span className="name">
-                            {user?.user_name?.length > 8
-                              ? user?.user_name?.slice(0, 8) + "..."
-                              : user.user_name}
-                          </span>
-                          <span className="title">
-                            {user?.title ? (
-                              user?.title?.length > 8 ? (
-                                user?.title?.slice(0, 10) + "..."
-                              ) : (
-                                user.title
-                              )
-                            ) : (
-                              <>&nbsp;</>
-                            )}
-                          </span>
+                          <div className="profile-image">
+                            <img src={user.profile_img} alt="profile" />
+                          </div>
+                          <div className="profile-content">
+                            <span className="name">
+                              {user?.user_name?.length > 18
+                                ? user?.user_name?.slice(0, 18) + "..."
+                                : user.user_name}
+                            </span>
+                            <span className="title">
+                              {user?.title?.length > 18
+                                ? user?.title?.slice(0, 18) + "..."
+                                : user.title}
+                            </span>
+                            <span className="followers">
+                              {user.followers} Followers
+                            </span>
+                          </div>
                         </Link>
                         <div className="suggst-btns">
                           <button
