@@ -43,7 +43,7 @@ function Suggested() {
     try {
       let res = await suggestedServ.suggestListTab(tabRequest);
       setsuggestedTab(res.users);
-      setLoading(false);
+      setLoading(true);
     } catch (err) {
       console.log(err);
     }
