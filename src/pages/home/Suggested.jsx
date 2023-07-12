@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import noProfile from "../../assets/images/noprofile.png";
 import "./Suggested.css";
 import SuggestedService from "../../services/suggestedService";
 import { Link } from "react-router-dom";
@@ -101,7 +102,10 @@ function Suggested() {
                     alt="close"
                     onClick={() => deleteSuggestedHome(user._id)}
                   />
-                  <img src={user.profile_img} alt="profile" />
+                  <img
+                    src={user?.profile_img ? user.profile_img : noProfile}
+                    alt="profile"
+                  />
                   <span className="name">
                     {user?.user_name?.length > 8
                       ? user?.user_name?.slice(0, 8) + "..."
@@ -204,7 +208,12 @@ function Suggested() {
                     <div className="profileBox">
                       <Link to={"/userprofile/" + user?._id}>
                         <div className="profile-image">
-                          <img src={user.profile_img} alt="profile" />
+                          <img
+                            src={
+                              user?.profile_img ? user.profile_img : noProfile
+                            }
+                            alt="profile"
+                          />
                         </div>
                         <div className="profile-content">
                           <span className="name">
