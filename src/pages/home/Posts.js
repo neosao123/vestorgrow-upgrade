@@ -186,7 +186,7 @@ const Posts = () => {
     }
   };
 
-  const updatePostAfterReaction = (mode, postId, data) => {
+  const updatePostAfterReaction = (mode, postId, data, uniqueReactions) => {
     if (mode === "inc") {
       let _postList = postList;
       let _postListIdx = _postList.findIndex((i) => i._id === postId);
@@ -196,9 +196,7 @@ const Posts = () => {
         type: data.type
       };
       _postList[_postListIdx].isLiked = true;
-      let reaction = _postList[_postListIdx].postReactions ?? [];
-      reaction.push(data.type);
-      _postList[_postListIdx].postReactions = reaction;
+      _postList[_postListIdx].postReactions = uniqueReactions;
       _postList[_postListIdx].likeCount = _postList[_postListIdx].likeCount + 1;
       setPostList([..._postList]);
     } else {
@@ -207,6 +205,7 @@ const Posts = () => {
       _postList[_postListIdx].reaction = null;
       _postList[_postListIdx].isLiked = false;
       _postList[_postListIdx].likeCount = _postList[_postListIdx].likeCount - 1;
+      _postList[_postListIdx].postReactions = uniqueReactions; 
       setPostList([..._postList]);
     }
   }
@@ -303,6 +302,7 @@ const Posts = () => {
             const originalPostId = item.originalPostId ?? null;
             item.duration = moment.duration(moment(date).diff(moment(item.createdAt)));
             let postReactions = item.postReactions ?? [];
+            const profileImage = item.createdBy?.profile_img !== "" ? item.createdBy.profile_img : "/images/profile/default-profile.png";
             return item.isHidden ? (
               <div className="bgDarkCard postHidden d-none d-md-block">
                 <div className="postHiddenInner d-flex align-items-center">
@@ -333,7 +333,7 @@ const Posts = () => {
                     <div className="feedBoxHeadLeft">
                       <div className="feedBoxprofImg">
                         <NavLink to={(item.createdBy !== null) ? "/userprofile/" + item.createdBy?._id : ""}>
-                          <ProfileImage url={item.createdBy?.profile_img} style={{ borderRadius: "30px" }} />
+                          <ProfileImage url={profileImage} style={{ borderRadius: "30px" }} />
                         </NavLink>
                       </div>
                       <div className="feedBoxHeadName">

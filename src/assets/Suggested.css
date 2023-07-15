@@ -1,6 +1,6 @@
 .suggestionBox {
-    position: sticky;
-    top: 98px;
+    position: relative;
+    top: 0px;
     /* height: ; */
     background: #fff;
     border-radius: 15px;
@@ -23,7 +23,8 @@
 }
 
 .suggestionBody {
-    height: 25vh;
+    height: 160px;
+    max-height: 160px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -180,10 +181,7 @@
 }
 
 @media only screen and (min-width: 992px) {
-    .suggestionBody {
-        height: 20vh;
-    }
-
+    
     .suggestionBox .profileBox {
         width: 100px;
         height: 120px;

@@ -9,12 +9,7 @@ export default class DiscoverService {
         }
         return object;
       }, {});
-      return await util.sendApiRequest(
-        "/discover/list",
-        "POST",
-        true,
-        category
-      );
+      return await util.sendApiRequest("/discover/list", "POST", true, category);
     } catch (err) {
       throw err;
     }

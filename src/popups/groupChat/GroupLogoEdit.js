@@ -8,7 +8,7 @@ export default function GroupLogoEdit({ file, onClose, onComplete }) {
     const [toBeCroped, setToBeCroped] = useState("");
     const [cropedImage, setCropedImage] = useState("");
     const cropperRef = useRef(null);
-    const [zoom, setZoom] = useState(0);
+    const [zoom, setZoom] = useState(1);
 
     useEffect(() => {
         getToBeCropped();
@@ -83,8 +83,9 @@ export default function GroupLogoEdit({ file, onClose, onComplete }) {
                                                     guides={false}
                                                     crop={onCrop}
                                                     ref={cropperRef}
+                                                    center={true}
                                                     zoom={zoom}
-                                                    viewMode={2}
+                                                    viewMode={1}
                                                     cropBoxResizable={false}
                                                     dragMode='move'
                                                     cropBoxMovable={false}

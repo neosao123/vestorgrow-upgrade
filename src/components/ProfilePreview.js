@@ -47,9 +47,11 @@ const ProfilePreview = ({ ...props }) => {
     const handleHover = async (e) => {
         e.preventDefault();
         if (loginUser._id !== userId) {
-            setIsLoading(true);
-            setOpen(true);
-            getUserDataPreview();
+            setTimeout(() => {
+                setIsLoading(true);
+                setOpen(true);
+                getUserDataPreview();
+            }, 2000);
         }
     }
 
@@ -89,10 +91,7 @@ const ProfilePreview = ({ ...props }) => {
             <div>
                 <img
                     alt=""
-                    src={
-                        profile_img ??
-                        "./images/icons/profile.svg"
-                    }
+                    src={profile_img !== "" ? profile_img : "/images/profile/default-profile.png"}
                     className="prf-pic rounded-circle border border-white border-3"
                     style={{ cursor: "pointer" }}
                     onMouseEnter={handleHover}
@@ -106,11 +105,10 @@ const ProfilePreview = ({ ...props }) => {
                                 <Loading />
                             ) : (
                                 <div>
-                                    <span className='fa fa-times text-dark float-end' style={{ background: "#525356", width: "20px", height: "20px", padding: "5px" }} onClick={handleClose}></span>
                                     <div className='user-section'>
                                         <div className="d-flex align-items-start">
                                             <img
-                                                src={userData?.profile_img ?? "./images/icons/profile.svg"}
+                                                src={userData?.profile_img ? userData.profile_img :  "/images/profile/default-profile.png"}
                                                 className="card-img-top hoverProfile"
                                                 alt="Profile"
                                                 style={{ width: "50px", height: "50px", borderRadius: "50%", marginRight: "8px" }}
@@ -160,7 +158,7 @@ const ProfilePreview = ({ ...props }) => {
                                                             Requested
                                                         </Link>
                                                     ) : (
-                                                        <Link className="btn btnColor w-100">
+                                                        <Link className="btn btnColor bg-dark w-100">
                                                             Following
                                                         </Link>
                                                     )

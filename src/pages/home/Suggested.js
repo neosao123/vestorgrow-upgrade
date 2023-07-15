@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import noProfile from "../../assets/images/noprofile.png";
-import "./Suggested.css";
+import "../../assets/Suggested.css";
 import SuggestedService from "../../services/suggestedService";
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import UserFollowerService from "../../services/userFollowerService";
 import Loader from "../../components/Loader";
+
 function Suggested() {
   const suggestedServ = new SuggestedService();
   const followerServ = new UserFollowerService();
@@ -74,12 +75,12 @@ function Suggested() {
     try {
       let resp = await followerServ.sendFollowReq({ followingId: id });
       return resp.data;
-    } catch (err) {}
+    } catch (err) { }
   };
 
   return (
     <>
-      <div className="suggestionBox ">
+      <div className="suggestionBox">
         <div className="suggestionHead">
           <span>Suggested for You</span>
           <span
@@ -103,7 +104,7 @@ function Suggested() {
                     onClick={() => deleteSuggestedHome(user._id)}
                   />
                   <img
-                    src={user?.profile_img ? user.profile_img : noProfile}
+                    src={user?.profile_img ? user.profile_img : "/images/profile/default-profile.png"}
                     alt="profile"
                   />
                   <span className="name">
@@ -210,7 +211,7 @@ function Suggested() {
                         <div className="profile-image">
                           <img
                             src={
-                              user?.profile_img ? user.profile_img : noProfile
+                              user?.profile_img ? user.profile_img : "/images/profile/default-profile.png"
                             }
                             alt="profile"
                           />

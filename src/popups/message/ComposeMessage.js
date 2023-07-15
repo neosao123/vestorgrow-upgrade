@@ -28,6 +28,7 @@ export default function ComposeMessage({ onClose, onFinish, deskView }) {
   useEffect(() => {
     getFollowerList();
   }, []);
+
   const getFollowerList = async () => {
     try {
       let obj = {

@@ -895,8 +895,7 @@ export default function Message() {
                         </div>
                     </div>
                 </div>
-            </div>
-
+            </div> 
         </>
     );
 }

@@ -47,7 +47,7 @@ const UserProfile = () => {
     const [showEnlarge, setShowEnlarge] = useState(false);
     const [privateAccount, setPrivateAccount] = useState(0);
     const [sessionUserId, setSessionUserId] = useState("");
-    const [activeTab, setActiveTab] = useState("posts");
+    const [activeTab, setActiveTab] = useState("about");
 
     const getUser = async (id) => {
         let currUser = JSON.parse(localStorage.getItem("user"));
@@ -282,17 +282,17 @@ const UserProfile = () => {
                         {(!user?.setting?.private || isFollowing === "following") && (
                             <ul className="nav nav-pills">
                                 <li className="nav-item">
-                                    <div className={activeTab === "posts" ? "nav-link active" : "nav-link"} onClick={() => {
-                                        handleActiveTab("posts");
-                                    }}>
-                                        <span> Posts </span>
-                                    </div>
-                                </li>
-                                <li className="nav-item">
                                     <div className={activeTab === "about" ? "nav-link active" : "nav-link"} onClick={() => {
                                         handleActiveTab("about");
                                     }}>
                                         <span>About</span>
+                                    </div>
+                                </li>
+                                <li className="nav-item">
+                                    <div className={activeTab === "posts" ? "nav-link active" : "nav-link"} onClick={() => {
+                                        handleActiveTab("posts");
+                                    }}>
+                                        <span> Posts </span>
                                     </div>
                                 </li>
                                 <li className="nav-item">
@@ -307,156 +307,6 @@ const UserProfile = () => {
                     </div>
                 </div>
                 <div className="tab-content mt-2">
-                    <div className={activeTab === "posts" ? "tab-pane active" : "tab-pane"} id="posts">
-                        <div className="row mt-3">
-                            {(!user?.setting?.private || isFollowing === "following") && (
-                                <div className="row">
-                                    {postList &&
-                                        postList.map((item, idx) => {
-                                            const postReactions = item.postReactions ?? [];
-                                            return (
-                                                <div className="col-sm-4 col-lg-4 dynamic-width-custom">
-                                                    <div className="bgWhiteCard feedBox post_box">
-                                                        <div className="feedBoxInner">
-                                                            <div className="feedBoxHead d-flex align-items-center">
-                                                                <div className="feedBoxHeadLeft">
-                                                                    <div className="feedBoxHeadName">
-                                                                        <h4 dangerouslySetInnerHTML={{ __html: item.message }} />
-                                                                        <p>
-                                                                            <span>{moment(item.createdAt).format("DD MMM YYYY")}</span>
-                                                                            <i className="fa fa-circle" aria-hidden="true" />
-                                                                            <span>{item?.shareType}</span>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="feedBoxHeadRight ms-auto">
-                                                                    <div className="feedBoxHeadDropDown">
-                                                                        <Link className="nav-link" data-bs-toggle="dropdown">
-                                                                            <img src="/images/icons/dots.svg" alt="dots" className="img-fluid" />
-                                                                        </Link>
-                                                                        <ul className="dropdown-menu">
-                                                                            <li>
-                                                                                <Link className="dropdown-item" href="#">
-                                                                                    <img src="/images/icons/hide-icon.svg" alt="hide-icon" className="img-fluid me-1" />{" "}
-                                                                                    Hide Post
-                                                                                </Link>
-                                                                            </li>
-                                                                            <li>
-                                                                                <Link
-                                                                                    onClick={() => handleReportRequest(item._id)}
-                                                                                    className="dropdown-item"
-                                                                                >
-                                                                                    <img
-                                                                                        src="/images/icons/report-post.svg"
-                                                                                        alt="report-post"
-                                                                                        className="img-fluid me-1"
-                                                                                    />
-                                                                                    Report Post
-                                                                                </Link>
-                                                                            </li>
-                                                                            <li>
-                                                                                <Link className="dropdown-item" href="#">
-                                                                                    <img src="/images/icons/add-user.svg" alt="add-user" className="img-fluid me-1" />{" "}
-                                                                                    Unfollow
-                                                                                </Link>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            {item?.mediaFiles.length > 0 ? (
-                                                                <div
-                                                                    className="postImg mx_minus postImg-custom-profile"
-                                                                    onClick={() => handlePostPopup(item._id, idx)}
-                                                                >
-                                                                    {isImage.includes(item?.mediaFiles[0].split(".").pop()) ? (
-                                                                        <img
-                                                                            src={item?.mediaFiles[0]}
-                                                                            alt="lesson-banner-img"
-                                                                            className="img-fluid postImg-custom-profile-image"
-                                                                        />
-                                                                    ) : (
-                                                                        // <img src={item?.mediaFiles[0]} alt="lesson-banner-img" className="img-fluid" />
-                                                                        <div className="position-relative video-thumbnailCustom-profile">
-                                                                            <VideoImageThumbnail videoUrl={item?.mediaFiles[0]} alt="video" />
-                                                                            <div className="overLay">
-                                                                                <span className="overLayCustom">
-                                                                                    <i className="fa-solid fa-film"></i>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                    {/* <img src="/images/profile/post2.png" alt="post-img" className="img-fluid" /> */}
-                                                                </div>
-                                                            ) : (
-                                                                <div className="postImg mx_minus postImg-custom-profile">
-                                                                    {
-                                                                        (matchYoutubeUrl(item.message)) ? (
-                                                                            <div style={{ width: "100%" }}>
-                                                                                <Playeryoutube url={item.message} height={"260px"} corners={false} />
-                                                                            </div>) : (
-                                                                            <div className="profile-post-image-text" style={{ padding: '25px' }}>
-                                                                                <div className="mb-0 profile-post-image-inner-text" dangerouslySetInnerHTML={{ __html: item.message.length > 320 ? item.message.slice(0, 320) + "..." : item.message }} />
-                                                                            </div>
-                                                                        )
-                                                                    }
-                                                                </div>
-                                                            )}
-                                                            <div className="postTxt" onClick={() => handlePostPopup(item._id, idx)}>
-                                                                <p className="mb-0 postcontent postcontent-custom">{item.message.slice(0, 85)}</p>
-                                                            </div>
-                                                            <div className="likeShareIconCounter">
-                                                                <ul className="nav">
-                                                                    <li className="nav-item">
-                                                                        {
-                                                                            postReactions.length > 0 ? (
-                                                                                <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(item?._id)}>
-                                                                                    <div className="floating-reactions-container">
-                                                                                        {
-                                                                                            postReactions.includes("like") && <span><img src="/images/icons/filled-thumbs-up.svg" alt="filled-thumbs-up" /></span>
-                                                                                        }
-                                                                                        {
-                                                                                            postReactions.includes("love") && <span><img src="/images/icons/filled-heart.svg" alt="filled-heart" /></span>
-                                                                                        }
-                                                                                        {
-                                                                                            postReactions.includes("insight") && <span><img src="/images/icons/filled-insightfull.svg" alt="filled-insightfull" /></span>
-                                                                                        }
-                                                                                    </div>
-                                                                                    <span className="mx-2">{countFormator(item?.likeCount)}</span>
-                                                                                </div>
-                                                                            ) : (
-                                                                                <Link
-                                                                                    className="nav-link feedUnlike feedCustom"
-                                                                                >
-                                                                                    <img src="/images/icons/like.svg" alt="like" className="img-fluid" />
-                                                                                    <span className="mx-2">{item?.likeCount}</span>
-                                                                                </Link>
-                                                                            )
-                                                                        }
-                                                                    </li>
-                                                                    <li className="nav-item">
-                                                                        <Link className="nav-link" href="#">
-                                                                            <img src="/images/icons/comment.svg" alt="comment" className="img-fluid" />{" "}
-                                                                            <span>{item?.commentCount}</span>
-                                                                        </Link>
-                                                                    </li>
-                                                                    <li className="nav-item">
-                                                                        <Link className="nav-link" href="#">
-                                                                            <img src="/images/icons/share.svg" alt="share" className="img-fluid" />{" "}
-                                                                            <span>{item?.shareCount}</span>
-                                                                        </Link>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                </div>
-                            )}
-                        </div>
-                    </div>
                     <div className={activeTab === "about" ? "tab-pane active" : "tab-pane"} id="about">
                         <div className="row g-2">
                             <div className="col-sm-12">
@@ -490,6 +340,152 @@ const UserProfile = () => {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div className={activeTab === "posts" ? "tab-pane active" : "tab-pane"} id="posts">
+                        <div className="row mt-3">
+                            {(!user?.setting?.private || isFollowing === "following") && (
+                                postList &&
+                                postList.map((item, idx) => {
+                                    const postReactions = item.postReactions ?? [];
+                                    return (
+                                        <div className="col-sm-4 col-lg-4 dynamic-width-custom">
+                                            <div className="bgWhiteCard feedBox post_box">
+                                                <div className="feedBoxInner">
+                                                    <div className="feedBoxHead d-flex align-items-center">
+                                                        <div className="feedBoxHeadLeft">
+                                                            <div className="feedBoxHeadName">
+                                                                <h4 dangerouslySetInnerHTML={{ __html: item.message }} />
+                                                                <p>
+                                                                    <span>{moment(item.createdAt).format("DD MMM YYYY")}</span>
+                                                                    <i className="fa fa-circle" aria-hidden="true" />
+                                                                    <span>{item?.shareType}</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="feedBoxHeadRight ms-auto">
+                                                            <div className="feedBoxHeadDropDown">
+                                                                <Link className="nav-link" data-bs-toggle="dropdown">
+                                                                    <img src="/images/icons/dots.svg" alt="dots" className="img-fluid" />
+                                                                </Link>
+                                                                <ul className="dropdown-menu">
+                                                                    <li>
+                                                                        <Link className="dropdown-item" href="#">
+                                                                            <img src="/images/icons/hide-icon.svg" alt="hide-icon" className="img-fluid me-1" />{" "}
+                                                                            Hide Post
+                                                                        </Link>
+                                                                    </li>
+                                                                    <li>
+                                                                        <Link
+                                                                            onClick={() => handleReportRequest(item._id)}
+                                                                            className="dropdown-item"
+                                                                        >
+                                                                            <img
+                                                                                src="/images/icons/report-post.svg"
+                                                                                alt="report-post"
+                                                                                className="img-fluid me-1"
+                                                                            />
+                                                                            Report Post
+                                                                        </Link>
+                                                                    </li>
+                                                                    <li>
+                                                                        <Link className="dropdown-item" href="#">
+                                                                            <img src="/images/icons/add-user.svg" alt="add-user" className="img-fluid me-1" />{" "}
+                                                                            Unfollow
+                                                                        </Link>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {item?.mediaFiles.length > 0 ? (
+                                                        <div
+                                                            className="postImg mx_minus postImg-custom-profile"
+                                                            onClick={() => handlePostPopup(item._id, idx)}
+                                                        >
+                                                            {isImage.includes(item?.mediaFiles[0].split(".").pop()) ? (
+                                                                <img
+                                                                    src={item?.mediaFiles[0]}
+                                                                    alt="lesson-banner-img"
+                                                                    className="img-fluid postImg-custom-profile-image"
+                                                                />
+                                                            ) : (
+                                                                <div className="position-relative video-thumbnailCustom-profile">
+                                                                    <VideoImageThumbnail videoUrl={item?.mediaFiles[0]} alt="video" />
+                                                                    <div className="overLay">
+                                                                        <span className="overLayCustom">
+                                                                            <i className="fa-solid fa-film"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="postImg mx_minus postImg-custom-profile">
+                                                            {
+                                                                (matchYoutubeUrl(item.message)) ? (
+                                                                    <div style={{ width: "100%" }}>
+                                                                        <Playeryoutube url={item.message} height={"260px"} corners={false} />
+                                                                    </div>) : (
+                                                                    <div className="profile-post-image-text" style={{ padding: '25px' }}>
+                                                                        <div className="mb-0 profile-post-image-inner-text" dangerouslySetInnerHTML={{ __html: item.message.length > 320 ? item.message.slice(0, 320) + "..." : item.message }} />
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    )}
+                                                    <div className="postTxt" onClick={() => handlePostPopup(item._id, idx)}>
+                                                        <p className="mb-0 postcontent postcontent-custom" dangerouslySetInnerHTML={{ __html: item.message.slice(0, 85) }} />
+                                                    </div>
+                                                    <div className="likeShareIconCounter">
+                                                        <ul className="nav align-items-center">
+                                                            <li className="nav-item">
+                                                                {
+                                                                    postReactions.length > 0 ? (
+                                                                        <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(item?._id)}>
+                                                                            <div className="floating-reactions-container">
+                                                                                {
+                                                                                    postReactions.includes("like") && <span><img src="/images/icons/filled-thumbs-up.svg" alt="filled-thumbs-up" /></span>
+                                                                                }
+                                                                                {
+                                                                                    postReactions.includes("love") && <span><img src="/images/icons/filled-heart.svg" alt="filled-heart" /></span>
+                                                                                }
+                                                                                {
+                                                                                    postReactions.includes("insight") && <span><img src="/images/icons/filled-insightfull.svg" alt="filled-insightfull" /></span>
+                                                                                }
+                                                                            </div>
+                                                                            <span className="mx-2">{countFormator(item?.likeCount)}</span>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <Link
+                                                                            className="nav-link feedUnlike feedCustom"
+                                                                        >
+                                                                            <img src="/images/icons/like.svg" alt="like" className="img-fluid" />
+                                                                            <span className="mx-2">{item?.likeCount}</span>
+                                                                        </Link>
+                                                                    )
+                                                                }
+                                                            </li>
+                                                            <li className="nav-item">
+                                                                <Link className="nav-link" href="#">
+                                                                    <img src="/images/icons/comment.svg" alt="comment" className="img-fluid" />{" "}
+                                                                    <span>{item?.commentCount}</span>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="nav-item">
+                                                                <Link className="nav-link" href="#">
+                                                                    <img src="/images/icons/share.svg" alt="share" className="img-fluid" />{" "}
+                                                                    <span>{item?.shareCount}</span>
+                                                                </Link>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
                         </div>
                     </div>
                     <div className={activeTab === "groups" ? "tab-pane active" : "tab-pane"} id="groups">

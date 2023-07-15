@@ -20,39 +20,16 @@ import Unfollow from "../unfollow/Unfollow";
 import OtherPostSharedSuccess from "../post/OtherPostSharedSuccess";
 import OtherPostShareFail from "../post/OtherPostSharedFail";
 import FBReactions from "../../components/FBReactions";
-import Slider from "react-slick";
-import "./DiscoverPost.css";
-import { PiArrowCircleLeftFill, PiArrowCircleRightFill } from "react-icons/pi";
+import ProfilePreview from "../../components/ProfilePreview";
 
-const isImage = [
-  "gif",
-  "jpg",
-  "jpeg",
-  "png",
-  "svg",
-  "HEIC",
-  "heic",
-  "webp",
-  "jfif",
-  "pjpeg",
-  "pjp",
-  "avif",
-  "apng",
-];
-export default function DiscoverPost({
-  onClose,
-  postId,
-  slideLeft,
-  slideRight,
-  changePostIdx,
-}) {
+const isImage = ["gif", "jpg", "jpeg", "png", "svg", "HEIC", "heic", "webp", "jfif", "pjpeg", "pjp", "avif", "apng"];
+export default function DiscoverPost({ onClose, postId, slideLeft, slideRight, changePostIdx }) {
   const postServ = new PostService();
   const discoverServ = new DiscoverService();
   const followerServ = new UserFollowerService();
   const globalCtx = useContext(GlobalContext);
   const [user, setUser] = globalCtx.user;
-  const [showCommentPostList, setShowCommentPostList] =
-    globalCtx.showCommentPostList;
+  const [showCommentPostList, setShowCommentPostList] = globalCtx.showCommentPostList;
   const [showSharePost, setShowSharePost] = useState(false);
   const [dataForSharePost, setDataForSharePost] = useState(null);
   const [post, setPost] = useState(null);
@@ -66,15 +43,12 @@ export default function DiscoverPost({
 
   const [showUnfollowPopup, setShowUnfollowPopup] = useState(false);
   const [unfollowUserData, setUnfollowUserData] = useState(null);
-  const [showOtherPostSharedPopup, setShowOtherPostSharedPopup] =
-    useState(false);
-  const [showOtherPostFailedPopup, setShowOtherPostFailedPopup] =
-    useState(false);
+  const [showOtherPostSharedPopup, setShowOtherPostSharedPopup] = useState(false);
+  const [showOtherPostFailedPopup, setShowOtherPostFailedPopup] = useState(false);
   const [imageIdx, setImageIdx] = useState(0);
 
   let twitterurl = "http://twitter.com/share?text=vestorgrow home page&url=";
-  let facebookurl =
-    "https://www.facebook.com/sharer/sharer.php?t=vestorgrow home page&u=";
+  let facebookurl = "https://www.facebook.com/sharer/sharer.php?t=vestorgrow home page&u=";
   let mailto = `mailto:${user?.email}?subject=Vestorgrow!!!&body=`;
   // let link = encodeURI(window.location.origin)
 
@@ -124,7 +98,7 @@ export default function DiscoverPost({
     } else {
       getPost();
     }
-  };
+  }
 
   const handleSharePost = async (postIdx, shareType) => {
     if (!post.originalPostId) {
@@ -189,10 +163,7 @@ export default function DiscoverPost({
   };
 
   const handleUnFollowRequest = async () => {
-    setUnfollowUserData({
-      id: post?.createdBy?._id,
-      userName: post?.createdBy?.user_name,
-    });
+    setUnfollowUserData({ id: post?.createdBy?._id, userName: post?.createdBy?.user_name });
     setShowUnfollowPopup(true);
   };
 
@@ -222,180 +193,122 @@ export default function DiscoverPost({
     } else {
       return counter.toString();
     }
-  };
+  }
 
   return (
     <>
       <div className="discover-post-heading_custom">
         <div className="feedBoxHeadRight">
-          {/* <i class="fa fa-chevron-left" aria-hidden="true" onClick={onClose}></i> */}
           <img
             className="arrow"
             src="/images/icons/left-arrow.svg"
             onClick={onClose}
             alt="left-arrow"
-            // onClick={setShowNotification(false)}
           />
-          {/* <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={onClose} /> */}
         </div>
         <h4>Discover</h4>
       </div>
-      <div
-        className="modal modal-custom-bg-scrollStop"
-        style={{ display: "block" }}
-        onClick={onModalClickHandler}
-      >
+      <div className="modal modal-custom-bg-scrollStop" style={{ display: "block" }} onClick={onModalClickHandler}>
         <div className="vertical-alignment-helper">
           <div className="vertical-align-center vertical-align-center-custom">
             <div
               className={
                 "discoverPosts modal-dialog modal-xl discoverPostSmall " +
-                (post?.mediaFiles && post?.mediaFiles.length > 0
-                  ? "discoverPostsCustom"
-                  : "discoverPostsCustomText")
+                (post?.mediaFiles && post?.mediaFiles.length > 0 ? "discoverPostsCustom" : "discoverPostsCustomText")
               }
             >
               <div className="modal-content discovery-content discovery-content_custom-mobile">
-                {/* Modal Header */}
                 <div className="modal-header modalHeader border-bottom-0 p-0 modalHeaderCustomMobile">
                   {slideRight && !mediaFiles && (
-                    <div
-                      onClick={() => changePostIdx(1)}
-                      className="dis-carousel-post-right carousel-right-btn-custom"
-                    >
+                    <div onClick={() => changePostIdx(1)} className="dis-carousel-post-right carousel-right-btn-custom">
                       <i className="fa-solid fa-angle-right"></i>
                     </div>
                   )}
                   {slideLeft && !mediaFiles && (
-                    <div
-                      onClick={() => changePostIdx(-1)}
-                      className="dis-carousel-post-left carousel-right-btn-custom"
-                    >
+                    <div onClick={() => changePostIdx(-1)} className="dis-carousel-post-left carousel-right-btn-custom">
                       <i className="fa-solid fa-angle-left"></i>
                     </div>
                   )}
-                  {/* <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={onClose} /> */}
                 </div>
-                {/* Modal body */}
                 <div className="modal-body p-0">
                   <div className="discoverPostModelBody discoverPostModelBodyCustom">
-                    {/* <h4 className="model-title">{post?.message?.slice(0, 25)}</h4> */}
                     {post?.mediaFiles && post?.mediaFiles.length > 0 && (
-                      <div className="discoverPostBanner">
-                        {/* <img src="/images/img/post-picture.png" alt="discover-post" className="img-fluid" /> */}
-
-                        {/* <div className=" d-flex align-items-center h-100"> */}
-                        <Slider
+                      <div className="discoverPostBanner d-flex align-items-center">
+                        <OwlCarousel
+                          className="owl-carousel owl-theme gallerySlider gallerySliderCustom"
+                          loop={false}
+                          margin={0}
                           dots={true}
-                          slidesToShow={1}
-                          slidesToScroll={1}
-                          infinite={false}
-                          // arrows={true}
-                          prevArrow={<PiArrowCircleLeftFill color="#00808b" />}
-                          nextArrow={<PiArrowCircleRightFill color="#00808b" />}
+                          nav={true}
+                          startPosition={imageIdx}
+                          navText={[
+                            "<div class='carousel-right-btn-custom'><i class='fa-solid fa-angle-left'></i></div>",
+                            "<div class='carousel-right-btn-custom'><i class='fa-solid fa-angle-right'></i></div>",
+                          ]}
+                          responsive={{
+                            0: {
+                              items: 1,
+                            },
+                            600: {
+                              items: 1,
+                            },
+                            1000: {
+                              items: 1,
+                            },
+                          }}
                         >
                           {post?.mediaFiles.map((item, idx) => {
                             return (
-                              <div key={idx}>
-                                {/* <div className="galleryImg galleryImgCustom"> */}
-                                {isImage.includes(item?.split(".").pop()) ? (
-                                  <>
-                                    <div className="image-box">
-                                      <img
-                                        src={item}
-                                        alt="gallery"
-                                        style={{
-                                          width: "100%",
-                                          height: "100%",
-                                          objectFit: "contain",
-                                        }}
-                                      />
-                                    </div>
-                                  </>
-                                ) : (
-                                  <>
-                                    <div
-                                      className="position-relative postCustomLongImgpx"
-                                      style={{ background: "#000" }}
-                                    >
-                                      <ReactPlayer
-                                        width="100%"
-                                        height="100%"
-                                        controls={true}
-                                        url={item}
-                                        playing={true}
-                                        onReady={() => console.log("ready")}
-                                      />
-                                      {/* { :
-                                                                        <>
-                                                                            <VideoImageThumbnail
-                                                                                videoUrl={item}
-                                                                                // thumbnailHandler={(thumbnail) => console.log(thumbnail)}
-                                                                                // width={120}
-                                                                                // height={80}
-                                                                                alt="video"
-                                                                            />
-                                                                            <div className="overLay">
-                                                                                <span className="overLayCustom"><i className="fa-solid fa-film"></i></span>
-                                                                            </div>
-                                                                        </>}  */}
-                                    </div>
-                                  </>
-                                )}
+                              <div
+                                className="item"
+                                style={{ width: "inherit" }}
+                                key={idx}
+                                onClick={() => openImageCarousellHandler(idx)}
+                              >
+                                <div className="galleryImg galleryImgCustom">
+                                  {isImage.includes(item.split(".").pop()) ? (
+                                    <img src={item} alt="gallery" className="img-fluid" />
+                                  ) : (
+                                    <>
+                                      <div className="position-relative postCustomLongImgpx postCustomLongImgpx-custom">
+                                        <ReactPlayer
+                                          width="100%"
+                                          height="100%"
+                                          controls={true}
+                                          url={item}
+                                          onReady={() => console.log("ready")}
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
                               </div>
-                              // </div>
                             );
                           })}
-                        </Slider>
+                        </OwlCarousel>
                       </div>
                     )}
-                    <div
-                      className="discoverFeed discoverFeedText discoverFeed-custom mt-4"
-                      style={{
-                        width:
-                          post?.mediaFiles && post?.mediaFiles.length > 0
-                            ? "50%"
-                            : "100%",
-                      }}
-                    >
+                    <div className="discoverFeed discoverFeedText discoverFeed-custom mt-4">
                       <div className="feedBoxInner discoverModelProfInner discoverModelProfInnerCustom">
-                        <div tyle={{ width: "100%" }}>
+                        <div>
                           <div className="feedBoxHead d-flex feedBoxHead-customMobile">
                             <div className="discoverModelProf">
                               <div className="feedBoxprofImg" onClick={onClose}>
-                                <Link
-                                  to={"/userprofile/" + post?.createdBy?._id}
-                                >
-                                  <ProfileImage
-                                    url={post?.createdBy?.profile_img}
-                                  />
+                                <Link to={"/userprofile/" + post?.createdBy?._id}>
+                                  <ProfilePreview userId={post?.createdBy?._id} profile_img={post?.createdBy?.profile_img} section="discovery" />
                                 </Link>
                               </div>
                             </div>
                             <div className="feedBoxHeadLeft ">
                               <div className="feedBoxHeadName">
-                                <h4
-                                  className="username-title-custom"
-                                  title={post?.createdBy?.user_name}
-                                >
-                                  <Link
-                                    to={"/userprofile/" + post?.createdBy?._id}
-                                    onClick={onClose}
-                                  >
+                                <h4 className="username-title-custom" title={post?.createdBy?.user_name}>
+                                  <Link to={"/userprofile/" + post?.createdBy?._id} onClick={onClose}>
                                     {post?.createdBy?.user_name.length > 18
-                                      ? post?.createdBy?.user_name.slice(
-                                          0,
-                                          18
-                                        ) + "..."
+                                      ? post?.createdBy?.user_name.slice(0, 18) + "..."
                                       : post?.createdBy?.user_name}{" "}
                                   </Link>
-                                  {post?.createdBy?.role.includes(
-                                    "userPaid"
-                                  ) ? (
-                                    <img
-                                      src="/images/icons/green-tick.svg"
-                                      alt="green-tick"
-                                    />
+                                  {post?.createdBy?.role.includes("userPaid") ? (
+                                    <img src="/images/icons/green-tick.svg" alt="green-tick" />
                                   ) : (
                                     ""
                                   )}
@@ -408,44 +321,27 @@ export default function DiscoverPost({
                                         Following
                                       </span>
                                     ) : isFollowing === "requested" ? (
-                                      <span
-                                        className="followDesign followDesign-custom"
-                                        onClick={handleRejectRequest}
-                                      >
+                                      <span className="followDesign followDesign-custom" onClick={handleRejectRequest}>
                                         Requested
                                       </span>
                                     ) : (
                                       <span
                                         className="followDesign followDesign-custom"
-                                        onClick={() =>
-                                          handleFollowRequest(
-                                            post?.createdBy?._id
-                                          )
-                                        }
+                                        onClick={() => handleFollowRequest(post?.createdBy?._id)}
                                       >
                                         Follow
                                       </span>
                                     ))}
                                 </h4>
                                 <p>
-                                  <span>
-                                    {moment(post?.createdAt).fromNow()}
-                                  </span>
-                                  <i
-                                    className="fa fa-circle"
-                                    aria-hidden="true"
-                                  />
+                                  <span>{moment(post?.createdAt).fromNow()}</span>
+                                  <i className="fa fa-circle" aria-hidden="true" />
                                   <span>{post?.shareType}</span>
                                 </p>
                               </div>
                             </div>
                             <div className="feedBoxHeadRight ms-auto btnClose-custom-mobile">
-                              <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="modal"
-                                onClick={onClose}
-                              />
+                              <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={onClose} />
                             </div>
                           </div>
                           <div className="postTxt">
@@ -453,31 +349,17 @@ export default function DiscoverPost({
                             {post?.message.length > 250 ? (
                               !showMoreList.includes(post?._id) ? (
                                 <Linkify
-                                  componentDecorator={(
-                                    decoratedHref,
-                                    decoratedText,
-                                    key
-                                  ) => (
+                                  componentDecorator={(decoratedHref, decoratedText, key) => (
                                     <SecureLink href={decoratedHref} key={key}>
                                       {decoratedText}
                                     </SecureLink>
                                   )}
                                 >
                                   <div className="mb-0 whiteSpace custom-inner-text">
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html:
-                                          post?.message.slice(0, 250) + "...",
-                                      }}
-                                    />
+                                    <div dangerouslySetInnerHTML={{ __html: post?.message.slice(0, 250) + "..." }} />
                                     <a
                                       href="javascript:void(0);"
-                                      onClick={() =>
-                                        setShowMoreList([
-                                          ...showMoreList,
-                                          post?._id,
-                                        ])
-                                      }
+                                      onClick={() => setShowMoreList([...showMoreList, post?._id])}
                                     >
                                       Show More
                                     </a>
@@ -485,31 +367,17 @@ export default function DiscoverPost({
                                 </Linkify>
                               ) : (
                                 <Linkify
-                                  componentDecorator={(
-                                    decoratedHref,
-                                    decoratedText,
-                                    key
-                                  ) => (
+                                  componentDecorator={(decoratedHref, decoratedText, key) => (
                                     <SecureLink href={decoratedHref} key={key}>
                                       {decoratedText}
                                     </SecureLink>
                                   )}
                                 >
                                   <div className="mb-0 whiteSpace custom-inner-text">
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: post?.message,
-                                      }}
-                                    />
+                                    <div dangerouslySetInnerHTML={{ __html: post?.message }} />
                                     <a
                                       href="javascript:void(0);"
-                                      onClick={() =>
-                                        setShowMoreList(
-                                          showMoreList.filter(
-                                            (i) => i !== post?._id
-                                          )
-                                        )
-                                      }
+                                      onClick={() => setShowMoreList(showMoreList.filter((i) => i !== post?._id))}
                                     >
                                       Show Less
                                     </a>
@@ -518,22 +386,14 @@ export default function DiscoverPost({
                               )
                             ) : (
                               <Linkify
-                                componentDecorator={(
-                                  decoratedHref,
-                                  decoratedText,
-                                  key
-                                ) => (
+                                componentDecorator={(decoratedHref, decoratedText, key) => (
                                   <SecureLink href={decoratedHref} key={key}>
                                     {decoratedText}
                                   </SecureLink>
                                 )}
                               >
                                 <div className="mb-0 whiteSpace custom-inner-text">
-                                  <div
-                                    dangerouslySetInnerHTML={{
-                                      __html: post?.message,
-                                    }}
-                                  />
+                                  <div dangerouslySetInnerHTML={{ __html: post?.message }} />
                                 </div>
                               </Linkify>
                             )}
@@ -542,48 +402,19 @@ export default function DiscoverPost({
                             <ul className="nav nav-custom-like-count">
                               <li className="nav-item">
                                 {post?.likeCount > 0 ? (
-                                  <div
-                                    className={"d-flex align-items-center"}
-                                    onClick={() =>
-                                      setShowUserLikedPost(post?._id)
-                                    }
-                                  >
+                                  <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(post?._id)}>
                                     <div className="floating-reactions-container">
-                                      <span>
-                                        <img
-                                          src="/images/icons/filled-thumbs-up.svg"
-                                          alt="filled-thumbs-up"
-                                        />
-                                      </span>
-                                      <span>
-                                        <img
-                                          src="/images/icons/filled-heart.svg"
-                                          alt="filled-heart"
-                                        />
-                                      </span>
-                                      <span>
-                                        <img
-                                          src="/images/icons/filled-insightfull.svg"
-                                          alt="filled-insightfull"
-                                        />
-                                      </span>
+                                      <span><img src="/images/icons/filled-thumbs-up.svg" alt="filled-thumbs-up" /></span>
+                                      <span><img src="/images/icons/filled-heart.svg" alt="filled-heart" /></span>
+                                      <span><img src="/images/icons/filled-insightfull.svg" alt="filled-insightfull" /></span>
                                     </div>
-                                    <span className="mx-2">
-                                      {countFormator(post?.likeCount)}
-                                    </span>
+                                    <span className="mx-2">{countFormator(post?.likeCount)}</span>
                                   </div>
                                 ) : (
-                                  <NavLink className="nav-link">
-                                    <img
-                                      src="/images/icons/no-reaction.svg"
-                                      alt="like"
-                                      className="img-fluid"
-                                      style={{
-                                        width: "24px",
-                                        height: "24px",
-                                        marginRight: "5px",
-                                      }}
-                                    />
+                                  <NavLink
+                                    className="nav-link"
+                                  >
+                                    <img src="/images/icons/no-reaction.svg" alt="like" className="img-fluid" style={{ width: "24px", height: "24px", marginRight: "5px" }} />
                                     <span>{post?.likeCount}</span>
                                   </NavLink>
                                 )}
@@ -595,26 +426,14 @@ export default function DiscoverPost({
                                     href="javascript:void(0);"
                                     onClick={() => handleShowComment(post?._id)}
                                   >
-                                    <b>{post?.commentCount}</b>{" "}
-                                    <span className="ms-1">
-                                      {post?.commentCount === 1
-                                        ? "comment"
-                                        : "comments"}
-                                    </span>
+                                    <b>{post?.commentCount}</b> <span className="ms-1">{post?.commentCount === 1 ? "comment" : "comments"}</span>
                                   </a>
                                   <a
                                     className="nav-link"
                                     href="javascript:void(0);"
-                                    onClick={() =>
-                                      setShowUserSharedPost(post?._id)
-                                    }
+                                    onClick={() => setShowUserSharedPost(post?._id)}
                                   >
-                                    <b>{post?.shareCount}</b>{" "}
-                                    <span className="ms-1">
-                                      {post?.shareCount === 1
-                                        ? "share"
-                                        : "shares"}
-                                    </span>
+                                    <b>{post?.shareCount}</b> <span className="ms-1">{post?.shareCount === 1 ? "share" : "shares"}</span>
                                   </a>
                                 </div>
                               </li>
@@ -623,13 +442,7 @@ export default function DiscoverPost({
                           <div className="likeShareIcon">
                             <ul className="nav">
                               <li className="nav-item">
-                                <FBReactions
-                                  postReaction={post?.reaction ?? null}
-                                  postId={post?._id}
-                                  updatePostAfterReaction={
-                                    updatePostAfterReaction
-                                  }
-                                />
+                                <FBReactions postReaction={post?.reaction ?? null} postId={post?._id} updatePostAfterReaction={updatePostAfterReaction} />
                               </li>
                               <li className="nav-item">
                                 <a
@@ -637,11 +450,7 @@ export default function DiscoverPost({
                                   href="javascript:void(0);"
                                   onClick={() => handleShowComment(post?._id)}
                                 >
-                                  <img
-                                    src="/images/icons/comment.svg"
-                                    alt="comment"
-                                    className="img-fluid me-1"
-                                  />
+                                  <img src="/images/icons/comment.svg" alt="comment" className="img-fluid me-1" />
                                   <span>Comment</span>
                                 </a>
                               </li>
@@ -652,11 +461,7 @@ export default function DiscoverPost({
                                     href="javascript:void(0);"
                                     data-bs-toggle="dropdown"
                                   >
-                                    <img
-                                      src="/images/icons/share.svg"
-                                      alt="share"
-                                      className="img-fluid me-1"
-                                    />
+                                    <img src="/images/icons/share.svg" alt="share" className="img-fluid me-1" />
                                     <span>Share</span>
                                   </a>
                                   <ul className="dropdown-menu dropdown-menu-customPaddingPost">
@@ -664,9 +469,7 @@ export default function DiscoverPost({
                                       <a
                                         className="dropdown-item"
                                         href="javascript:void(0);"
-                                        onClick={() =>
-                                          handleSharePost(0, "Friends")
-                                        }
+                                        onClick={() => handleSharePost(0, "Friends")}
                                       >
                                         <img
                                           src="/images/icons/share-to-feed.svg"
@@ -680,9 +483,7 @@ export default function DiscoverPost({
                                       <a
                                         className="dropdown-item"
                                         href="javascript:void(0);"
-                                        onClick={() =>
-                                          handleSharePost(0, "Selected")
-                                        }
+                                        onClick={() => handleSharePost(0, "Selected")}
                                       >
                                         <img
                                           src="/images/icons/share-to-friends.svg"
@@ -698,11 +499,7 @@ export default function DiscoverPost({
                                         href="javascript:void(0);"
                                         onClick={() =>
                                           navigator.clipboard.writeText(
-                                            encodeURI(
-                                              window.location.origin +
-                                                "/post/" +
-                                                post?._id
-                                            )
+                                            encodeURI(window.location.origin + "/post/" + post?._id)
                                           )
                                         }
                                       >
@@ -717,14 +514,7 @@ export default function DiscoverPost({
                                     <li>
                                       <a
                                         className="dropdown-item"
-                                        href={
-                                          facebookurl +
-                                          encodeURI(
-                                            window.location.origin +
-                                              "/post/" +
-                                              post?._id
-                                          )
-                                        }
+                                        href={facebookurl + encodeURI(window.location.origin + "/post/" + post?._id)}
                                         target="_blank"
                                       >
                                         <img
@@ -738,14 +528,7 @@ export default function DiscoverPost({
                                     <li>
                                       <a
                                         className="dropdown-item"
-                                        href={
-                                          twitterurl +
-                                          encodeURI(
-                                            window.location.origin +
-                                              "/post/" +
-                                              post?._id
-                                          )
-                                        }
+                                        href={twitterurl + encodeURI(window.location.origin + "/post/" + post?._id)}
                                         target="_blank"
                                       >
                                         <img
@@ -757,11 +540,7 @@ export default function DiscoverPost({
                                       </a>
                                     </li>
                                     <li>
-                                      <a
-                                        className="dropdown-item"
-                                        href={mailto}
-                                        target="_blank"
-                                      >
+                                      <a className="dropdown-item" href={mailto} target="_blank">
                                         <img
                                           src="/images/icons/share-to-friends.svg"
                                           alt="share-to-friends"
@@ -796,28 +575,15 @@ export default function DiscoverPost({
           </div>
         </div>
       </div>
-      {showSharePost && (
-        <SharePostSelect
-          onClose={() => setShowSharePost(!showSharePost)}
-          post={dataForSharePost}
-        />
-      )}
+      {showSharePost && <SharePostSelect onClose={() => setShowSharePost(!showSharePost)} post={dataForSharePost} />}
       {showOtherPostSharedPopup && (
-        <OtherPostSharedSuccess
-          onClose={() => setShowOtherPostSharedPopup(!showOtherPostSharedPopup)}
-        />
+        <OtherPostSharedSuccess onClose={() => setShowOtherPostSharedPopup(!showOtherPostSharedPopup)} />
       )}
       {showOtherPostFailedPopup && (
-        <OtherPostShareFail
-          onClose={() => setShowOtherPostFailedPopup(!showOtherPostFailedPopup)}
-        />
+        <OtherPostShareFail onClose={() => setShowOtherPostFailedPopup(!showOtherPostFailedPopup)} />
       )}
       {mediaFiles && mediaFiles.length > 0 && (
-        <ImageCarousel
-          onClose={() => setMediaFiles(null)}
-          mediaFiles={mediaFiles}
-          imageIdx={imageIdx}
-        />
+        <ImageCarousel onClose={() => setMediaFiles(null)} mediaFiles={mediaFiles} imageIdx={imageIdx} />
       )}
       {showUserLikedPost && (
         <UserLikedPost

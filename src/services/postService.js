@@ -132,4 +132,11 @@ export default class PostService {
             throw err;
         }
     }
+    async getPostUniqueReactions(data) {
+        try { 
+            return await util.sendApiRequest("/postlike/posts/reactions", "Post", true, data);
+        } catch (err) {
+            throw err;
+        }
+    }
 }

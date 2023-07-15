@@ -118,6 +118,16 @@ function Sidebar() {
           <div className="themeMenu themeMenuCustom">
             <ul className="nav flex-column">
               <li className={"nav-item " + (selectedNavIcon === "/" ? " active" : "")} onClick={handleClickHome}>
+                <Link className={"nav-link" + (selectedNav === "/" ? " active" : "")} to="/new/message">
+                  <div className="sideMenu"> 
+                    <div className="menuTxt">
+                      <span>New Message</span>
+                    </div>
+                  </div>
+                </Link>
+                <div className="activeBar"></div>
+              </li>
+              <li className={"nav-item " + (selectedNavIcon === "/" ? " active" : "")} onClick={handleClickHome}>
                 <Link className={"nav-link" + (selectedNav === "/" ? " active" : "")} to="/">
                   <div className="sideMenu">
                     <div className="menuIcon">

@@ -33,8 +33,17 @@ const FBReactions = ({ ...props }) => {
         }
     };
 
+    const postUniqueReactions = async () => {
+        const reactions = await postServ.getPostUniqueReactions({ "postId": postId });
+        if (reactions.data) {
+            return reactions.data;
+        } else {
+            return [];
+        }
+    }
+
     const addReaction = async (reaction) => {
-        try {            
+        try {
             if (reaction === "like" || reaction === "love" || reaction === "insight") {
                 let resp = await postServ.likePost({ postId: postId, type: reaction });
                 if (resp.data) {
@@ -46,11 +55,14 @@ const FBReactions = ({ ...props }) => {
                         setActiveReaction("Loved");
                     } else {
                         setReactionImage(insightImage);
-                        setActiveReaction("Insighted");
+                        setActiveReaction("Insightful");
                     }
+
+                    const reactionOfPost = await postUniqueReactions();
+
                     setTimeout(() => {
                         const data = resp.data;
-                        updatePostAfterReaction("inc", postId, data);
+                        updatePostAfterReaction("inc", postId, data, reactionOfPost);
                     }, 800);
                     setBtnCLicked(false);
                 }
@@ -65,8 +77,11 @@ const FBReactions = ({ ...props }) => {
         try {
             let resp = await postServ.dislikePost(postId);
             if (resp.message) {
+
+                const reactionOfPost = await postUniqueReactions();
+
                 setTimeout(() => {
-                    updatePostAfterReaction("dec", postId, {});
+                    updatePostAfterReaction("dec", postId, {}, reactionOfPost);
                     setReactionImage(noreactionImage);
                     setActiveReaction("Like");
                 }, 800);
@@ -119,7 +134,7 @@ const FBReactions = ({ ...props }) => {
                     break;
                 case "insight":
                     setReactionImage(insightImage);
-                    setActiveReaction("Insighted");
+                    setActiveReaction("Insightful");
                     break;
                 default:
                     setReactionImage(noreactionImage);

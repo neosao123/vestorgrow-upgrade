@@ -150,7 +150,7 @@ export default function UserLikedPost({ onClose, postId }) {
     );
   }
 
-  
+
 
   return (
     <>
@@ -224,7 +224,7 @@ export default function UserLikedPost({ onClose, postId }) {
                           return (
                             <div className="prf-bx" key={"reacted-user" + idx}>
                               <Link className="me-3" to={"/userprofile/" + item.createdBy?._id} >
-                                <img src={item.createdBy?.profile_img} alt={item.user_name} className="prfimg" />
+                                <img src={item.createdBy?.profile_img !== "" ? item.createdBy?.profile_img : "/images/profile/default-profile.png"} alt={item.user_name} className="prfimg" />
                                 <ReactionFilledIcon type={item.type} />
                               </Link>
                               <div className="text-dark">

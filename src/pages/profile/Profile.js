@@ -55,7 +55,7 @@ const Profile = () => {
     const [showLoadingBar, setShowLoadingBar] = useState(false);
     const [partition, setPartition] = useState(1);
     const [showUserSharedPost, setShowUserSharedPost] = useState("");
-    const [activeTab, setActiveTab] = useState("posts");
+    const [activeTab, setActiveTab] = useState("about");
 
     const [suggestedUsers, setSuggestedUsers] = useState([]);
 
@@ -214,7 +214,7 @@ const Profile = () => {
 
     const handleActiveTab = (activetab) => {
         setTimeout(async () => {
-            setActiveTab(activetab); 
+            setActiveTab(activetab);
             if (activetab === "about" || activetab === "group") {
                 await getSuggestedUsers()
             }
@@ -235,7 +235,7 @@ const Profile = () => {
     const handleFollowReq = async (id) => {
 
     };
- 
+
     let twitterurl = "http://twitter.com/share?text=vestorgrow home page&url=";
     let facebookurl = "https://www.facebook.com/sharer/sharer.php?t=vestorgrow home page&u=";
     let mailto = `mailto:${user?.email}?subject=Vestorgrow!!!&body=`;
@@ -357,17 +357,17 @@ const Profile = () => {
                     <div className="page_link">
                         <ul className="nav nav-pills">
                             <li className="nav-item">
-                                <div className={activeTab === "posts" ? "nav-link active" : "nav-link"} onClick={() => {
-                                    handleActiveTab("posts");
-                                }}>
-                                    <span> Posts </span>
-                                </div>
-                            </li>
-                            <li className="nav-item">
                                 <div className={activeTab === "about" ? "nav-link active" : "nav-link"} onClick={() => {
                                     handleActiveTab("about");
                                 }}>
                                     <span>About</span>
+                                </div>
+                            </li>
+                            <li className="nav-item">
+                                <div className={activeTab === "posts" ? "nav-link active" : "nav-link"} onClick={() => {
+                                    handleActiveTab("posts");
+                                }}>
+                                    <span> Posts </span>
                                 </div>
                             </li>
                             <li className="nav-item">
@@ -381,6 +381,99 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="tab-content mt-2">
+                    <div className={activeTab === "about" ? "tab-pane active" : "tab-pane"} id="about">
+                        <div className="row g-2">
+                            <div className="col-sm-12 col-md-7 col-lg-8">
+                                <div className="card border-0">
+                                    <div className="card-body">
+                                        {showEditAbout === true ?
+                                            (
+                                                <>
+                                                    <div>
+                                                        <h6 className="card-section-title">
+                                                            <span className="me-2">Edit About</span>
+                                                            <span style={{ fontWeight: "400" }}>(This information will be publicly displayed and visible for al users)</span>
+                                                        </h6>
+                                                    </div>
+                                                    <EditAbout onClose={() => setShowEditAbout(false)} />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <h6 className="card-section-title">About</h6>
+                                                    <div className="row">
+                                                        <div className="col-12 mb-3">
+                                                            <div className="abt-title">Bio</div>
+                                                            <p dangerouslySetInnerHTML={{ __html: user.bio }} />
+                                                        </div>
+                                                        <div className="col-12 mb-4">
+                                                            <div className="abt-title">Investment Interests</div>
+                                                            <div className="keyWord mt-3 d-flex">
+                                                                {user?.investmentInterests && user?.investmentInterests.map((item, idx) => {
+                                                                    return (
+                                                                        <span className="keywordListItem">
+                                                                            <p>{item}</p>
+                                                                        </span>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-12 mb-4">
+                                                            <img src="/images/icons/globe.svg" alt="globe" className="me-2" />
+                                                            <span dangerouslySetInnerHTML={{ __html: user.websiteUrl }} />
+                                                        </div>
+                                                        <div className="col-12 text-center">
+                                                            <div className="editComm_btn editComm_btnCustom" onClick={handleEditAbout}>
+                                                                <img src="/images/profile/editIcon.svg" alt="edit-icon" />
+                                                                <span>Edit About</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-12 col-md-5 col-lg-4">
+                                <div className="card border-0">
+                                    <div className="card-body">
+                                        <div className="suggested-header">
+                                            <h6 className="card-title">Suggested for you</h6>
+                                            <div className="see-all-link">See All</div>
+                                        </div>
+                                        <div>
+                                            {
+                                                suggestedUsers && suggestedUsers.map((suggestedUser, index) => {
+                                                    if (index < 4) {
+                                                        return (
+                                                            <div key={"abt-sgu-" + index} className="mb-2 border-bottom border-1 py-3">
+                                                                <div className="d-flex align-align-items-start">
+                                                                    <ProfileImage url={suggestedUser.profile_img} style={{ borderRadius: "50%", width: "48px", height: "48px" }} />
+                                                                    <div className="ms-3">
+                                                                        <div style={{ fontWeight: "600" }}>{suggestedUser?.user_name.length > 27 ? suggestedUser?.user_name.slice(0, 27) + "..." : user?.user_name}</div>
+                                                                        <div>{suggestedUser?.first_name} {suggestedUser?.last_name}</div>
+                                                                        <div>{suggestedUser?.title}</div>
+                                                                        <div>
+                                                                            <button
+                                                                                className={`btn btnColor btnFollow`}
+                                                                                onClick={() => handleFollowReq(suggestedUser._id)}
+                                                                            >
+                                                                                Follow
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className={activeTab === "posts" ? "tab-pane active" : "tab-pane"} id="posts">
                         <div className="row mt-3">
                             {
@@ -531,99 +624,7 @@ const Profile = () => {
                             }
                         </div>
                     </div>
-                    <div className={activeTab === "about" ? "tab-pane active" : "tab-pane"} id="about">
-                        <div className="row g-2">
-                            <div className="col-sm-12 col-md-7 col-lg-8">
-                                <div className="card border-0">
-                                    <div className="card-body">
-                                        {showEditAbout === true ?
-                                            (
-                                                <>
-                                                    <div>
-                                                        <h6 className="card-section-title">
-                                                            <span className="me-2">Edit About</span>
-                                                            <span style={{ fontWeight: "400" }}>(This information will be publicly displayed and visible for al users)</span>
-                                                        </h6>
-                                                    </div>
-                                                    <EditAbout onClose={() => setShowEditAbout(false)} />
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <h6 className="card-section-title">About</h6>
-                                                    <div className="row">
-                                                        <div className="col-12 mb-3">
-                                                            <div className="abt-title">Bio</div>
-                                                            <p dangerouslySetInnerHTML={{ __html: user.bio }} />
-                                                        </div>
-                                                        <div className="col-12 mb-4">
-                                                            <div className="abt-title">Investment Interests</div>
-                                                            <div className="keyWord mt-3 d-flex">
-                                                                {user?.investmentInterests && user?.investmentInterests.map((item, idx) => {
-                                                                    return (
-                                                                        <span className="keywordListItem">
-                                                                            <p>{item}</p>
-                                                                        </span>
-                                                                    );
-                                                                })}
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12 mb-4">
-                                                            <img src="/images/icons/globe.svg" alt="globe" className="me-2" />
-                                                            <span dangerouslySetInnerHTML={{ __html: user.websiteUrl }} />
-                                                        </div>
-                                                        <div className="col-12 text-center">
-                                                            <div className="editComm_btn editComm_btnCustom" onClick={handleEditAbout}>
-                                                                <img src="/images/profile/editIcon.svg" alt="edit-icon" />
-                                                                <span>Edit About</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </>
-                                            )
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-sm-12 col-md-5 col-lg-4">
-                                <div className="card border-0">
-                                    <div className="card-body">
-                                        <div className="suggested-header">
-                                            <h6 className="card-title">Suggested for you</h6>
-                                            <div className="see-all-link">See All</div>
-                                        </div>
-                                        <div>
-                                            {
-                                                suggestedUsers && suggestedUsers.map((suggestedUser, index) => {
-                                                    if (index < 4) {
-                                                        return (
-                                                            <div key={"abt-sgu-" + index} className="mb-2 border-bottom border-1 py-3">
-                                                                <div className="d-flex align-align-items-start">
-                                                                    <ProfileImage url={suggestedUser.profile_img} style={{ borderRadius: "50%", width: "48px", height: "48px" }} />
-                                                                    <div className="ms-3">
-                                                                        <div style={{ fontWeight: "600" }}>{suggestedUser?.user_name.length > 27 ? suggestedUser?.user_name.slice(0, 27) + "..." : user?.user_name}</div>
-                                                                        <div>{suggestedUser?.first_name} {suggestedUser?.last_name}</div>
-                                                                        <div>{suggestedUser?.title}</div>
-                                                                        <div>
-                                                                            <button
-                                                                                className={`btn btnColor btnFollow`}
-                                                                                onClick={() => handleFollowReq(suggestedUser._id)}
-                                                                            >
-                                                                                Follow
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                })
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div className={activeTab === "groups" ? "tab-pane active" : "tab-pane"} id="groups">
                         <div className="row g-2">
                             <div className="col-sm-12 col-md-7 col-lg-8">

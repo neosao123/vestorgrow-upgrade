@@ -2,7 +2,8 @@ import Profile from "./Profile";
 import Posts from "./Posts";
 import ChatsType from "./ChatsType";
 import Suggested from "./Suggested";
-import "./Suggested.css";
+import "../../assets/Suggested.css";
+
 function HomePage() {
   return (
     <div className="socialContant socialContant_custom main_container pb-0">
@@ -17,4 +18,5 @@ function HomePage() {
     </div>
   );
 }
+
 export default HomePage;

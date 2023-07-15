@@ -1,7 +1,48 @@
+ 
+
+.discoveryHeading {
+  font-weight: 600;
+}
+
+.mostRecent {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
 .discoverFeed {
   display: flex;
   gap: 14px;
   overflow-y: hidden;
+}
+
+.category-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 1.5rem auto;
+}
+
+.category-btn button {
+  padding: 5px 20px;
+  border: none;
+  color: #000000;
+  background: #C5C5C5;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.category-btn button:hover,
+.category-btn button:focus,
+.category-btn button.active-category {
+  color: #ffffff;
+  background-color: #00808b;
+}
+
+.mostRecent .btn {
+  color: #00808b;
+  border: 1px solid #00808b;
 }
 
 .discoverPosts .modal-content {
@@ -16,7 +57,8 @@
 .discover {
   position: relative;
   border-radius: 15px 15px 15px 15px;
-  border: 1px solid #cce3e8;
+  /* border: 1px solid #cce3e8; */
+  border: none;
   transition: all 0.3s ease;
   border-radius: 15px 15px 15px 15px;
 }
@@ -147,9 +189,13 @@
 }
 
 .grid-likes {
-  color: #00798b;
+  color: #000000;
   margin-left: auto;
   margin-right: 5px;
+}
+
+.grid-likes span {
+  color: #000000;
 }
 
 .grid-likes a {

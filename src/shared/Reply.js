@@ -145,7 +145,7 @@ export default function Reply({ postId, comment, getCommentList }) {
       <div className="mn-cmt-container">
         <div className="prfimg">
           <Link to={"/userprofile/" + user?._id}>
-            <img src={user?.profile_img} alt="" />
+            <img src={user?.profile_img !== "" ? user.profile_img : "/images/profile/default-profile.png"} alt="" />
           </Link>
         </div>
         <MentionsInput

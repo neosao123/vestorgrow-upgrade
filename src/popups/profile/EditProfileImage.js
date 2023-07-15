@@ -74,15 +74,13 @@ export default function EditProfileImage({ file, onClose, onComplete }) {
     if (cropperRef.current) {
       const cropper = cropperRef.current.cropper;
       cropper.zoom(0.1);
-      console.log(cropper.zoom);
     }
   };
 
   const handleZoomOut = () => {
     if (cropperRef.current) {
       const cropper = cropperRef.current.cropper;
-      cropper.zoom(-0.1);
-      console.log(cropper.zoom);
+      cropper.zoom(-0.1);     
     }
   };
 
@@ -117,18 +115,14 @@ export default function EditProfileImage({ file, onClose, onComplete }) {
                 <div className="modal-body px-0">
                   <div className="tabSendContent">
                     <div style={{ display: "flex" }}>
-                      <div id="image-cropper" className="profileImageCropper profileImageCropperCustom">
-                        {/* <div className="file_uploder"> */}
-                        {/* <i className="fa fa-cloud-upload" aria-hidden="true" /> */}
+                      <div id="image-cropper" className="profileImageCropper profileImageCropperCustom"> 
                         <Cropper
                           src={toBeCroped}
                           style={{ width: "100%", minHeight: "480px", maxHeight: "480px" }}
                           initialAspectRatio={1}
                           guides={false}
                           crop={onCrop}
-                          ref={cropperRef}
-                          // zoomTo={(parseInt(zoom) + 30) / 30}
-                          //zoomTo={parseInt(zoom) / 4}
+                          ref={cropperRef} 
                           center={true}
                           zoom={zoom}
                           viewMode={1}
@@ -137,7 +131,7 @@ export default function EditProfileImage({ file, onClose, onComplete }) {
                           cropBoxMovable={false}
                           movable={true}
                         />
-                        {/* </div> */}
+                         
                       </div>
                     </div>
                     <div className="cropper_rage_custom">

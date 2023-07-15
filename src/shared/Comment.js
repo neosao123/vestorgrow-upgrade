@@ -85,7 +85,7 @@ export default function Comment({ post, showCommentList, updatePost, heightUnset
     }
   }, [showCommentList, post]);
 
-  useEffect(() => {
+  useEffect(() => {  
     setFormikValue();
   }, [message]);
 
@@ -286,7 +286,7 @@ export default function Comment({ post, showCommentList, updatePost, heightUnset
 
   const CustomSuggestion = ({ suggestion, ...props }) => (
     <div {...props} style={{ padding: "5px", display: "flex", alignItems: "center" }}>
-      <img src={props.img !== "" ? props.img : "/images/user.png"} alt={props.display} style={{ width: "32px", height: "32px", borderRadius: "16px", marginRight: "5px" }} />
+      <img src={props.img !== "" ? props.img : "/images/profile/default-profile.png"} alt={props.display} style={{ width: "32px", height: "32px", borderRadius: "16px", marginRight: "5px" }} />
       <div style={{ fontSize: "1.0rem" }}>{props.display}</div>
     </div>
   );
@@ -298,14 +298,7 @@ export default function Comment({ post, showCommentList, updatePost, heightUnset
           <div className="sendPost d-flex align-items-center sendPostHome" id="emojiPickerComment-id-Custom">
             {showEmoji && (
               <div
-                className={
-                  "picker-head " +
-                  (idx === 0 && postsLength > 1
-                    ? "emojiPicker-comment emojiPicker-comment-down"
-                    : idx === 1 && postsLength > 2
-                      ? "emojiPicker-comment emojiPicker-comment-down"
-                      : "emojiPicker-comment")
-                }
+                className={"picker-head emojiPicker-comment-up"}
               >
                 <div className="closeBtnPositionCustom close-btn-picker">
                   <button
@@ -316,8 +309,6 @@ export default function Comment({ post, showCommentList, updatePost, heightUnset
                 </div>
                 <Picker
                   data={data}
-                  navPosition="bottom"
-                  previewPosition="bottom"
                   perLine={isMobile ? 7 : 9}
                   onClickOutside={(e) => {
                     if (!e.target.closest("#emojiPickerComment-id-Custom")) {
@@ -325,13 +316,16 @@ export default function Comment({ post, showCommentList, updatePost, heightUnset
                     }
                   }}
                   onEmojiSelect={(e) => handleEmojiSelection(e, e.native)}
+                  previewPosition={"none"}
+                  searchPosition={"none"}
+                  navPosition={"none"}
                 />
               </div>
             )}
             <div className="mn-cmt-container">
               <div className="prfimg" onClick={onClose}>
                 <Link to={"/userprofile/" + user?._id}>
-                  <img src={user?.profile_img} alt="" />
+                  <img src={user?.profile_img !== "" ? user.profile_img : "/images/profile/default-profile.png"} alt="" />
                 </Link>
               </div>
               <MentionsInput
@@ -386,16 +380,12 @@ export default function Comment({ post, showCommentList, updatePost, heightUnset
                       <div className="userRepliedName">
                         <Link to={"/userprofile/" + item.createdBy?._id} onClick={onClose}>
                           <h4 className="mb-0 username-title-custom" title={item?.createdBy?.user_name}>
-                            {/* {item.createdBy?.user_name
-                              ? item.createdBy?.user_name
-                              : `${item.createdBy?.first_name} ${item.createdBy?.last_name}`}{" "} */}
                             {item?.createdBy?.user_name.length > 17
                               ? item?.createdBy?.user_name.slice(0, 17) + "..."
                               : item?.createdBy?.user_name}{" "}
                             {item.createdBy?.role.includes("userPaid") ? (
                               <img src="/images/icons/green-tick.svg" alt="" />
                             ) : (
-                              // <img src="/images/icons/dot.svg" />
                               ""
                             )}{" "}
                           </h4>

@@ -1,9 +1,3 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 /**|| Font Face CSS Start ||**/
 @font-face {
   font-family: "Gilroy";
@@ -442,8 +436,6 @@ a {
 }
 
 .rightColumn {
-  max-width: 100%;
-  min-width: 0%;
   width: 25%;
 }
 
@@ -1033,7 +1025,7 @@ hr.horiz {
   background: rgba(4, 117, 107, 0.1);
 }
 
-.btn-check:focus+.btn,
+.btn-check:focus + .btn,
 .btn:focus {
   outline: 0;
   box-shadow: unset;
@@ -1082,8 +1074,7 @@ hr.horiz {
 }
 
 .allFeedUser {
-  /* height: calc(100vh - 346px); */
-  /* margin-top: 5%; */
+  height: calc(100vh - 346px);
   overflow: auto;
 }
 
@@ -1437,7 +1428,7 @@ hr.horiz {
 }
 
 .followesNav .nav-pills .nav-link.active,
-.followesNav .nav-pills .show>.nav-link {
+.followesNav .nav-pills .show > .nav-link {
   background-color: #fff;
   color: #0d1b1d;
   font-weight: 600;
@@ -1772,11 +1763,11 @@ hr.horiz {
   transition: transform 400ms ease;
 }
 
-.switchDot input:checked+.growDot::before {
+.switchDot input:checked + .growDot::before {
   border-color: #d1d1d1;
 }
 
-.switchDot input:checked+.growDot::after {
+.switchDot input:checked + .growDot::after {
   transform: translateY(-50%) scale(0.8);
 }
 
@@ -1856,11 +1847,11 @@ label.radioLabel {
   transition: transform 400ms ease;
 }
 
-.radioLabel input:checked+.selectedRadio::before {
+.radioLabel input:checked + .selectedRadio::before {
   border-color: #00808b;
 }
 
-.radioLabel input:checked+.selectedRadio::after {
+.radioLabel input:checked + .selectedRadio::after {
   transform: translateY(-50%) scale(0.55);
 }
 
@@ -2873,7 +2864,6 @@ s .multiplePostRight .multiplePostimg {
 }
 
 .mostRecent {
-  width: 100%;
   display: flex;
   justify-content: flex-end;
   margin-bottom: 30px;
@@ -2901,21 +2891,13 @@ s .multiplePostRight .multiplePostimg {
   color: #465d61;
 }
 
-@media only screen and (max-width: 768px) {
-  .mostRecent .btn-1 {
-    width: 85px;
-    border-radius: 25px;
-    padding: 5px 10px;
-  }
-}
-
 .discoverTab ul.nav li a {
   background-color: #222222;
   color: #fff;
 }
 
 .discoverTab .nav-pills .nav-link.active,
-.discoverTab .nav-pills .show>.nav-link {
+.discoverTab .nav-pills .show > .nav-link {
   background-color: #222222;
 }
 
@@ -2931,50 +2913,6 @@ s .multiplePostRight .multiplePostimg {
   text-decoration: none;
 }
 
-
-.category-btn {
-  width: 80%;
-  margin-top: 1%;
-  /* margin-bottom: 1%; */
-  /* text-align: center; */
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-}
-
-.category-btn button {
-  border: 0;
-  outline: 0;
-  background-color: #d1d1d1;
-  padding: 3px 10px;
-  border-radius: 10px;
-  margin: 10px 15px;
-  font-size: 1.3rem;
-  text-align: center;
-  font-weight: 600;
-  transition: all 0.1s ease-in-out;
-}
-
-.category-btn .active-category {
-  color: #fff;
-  background-color: #00808b;
-}
-
-@media only screen and (max-width: 768px) {
-  .category-btn {
-    width: 100%;
-    justify-content: start;
-  }
-
-  .category-btn button {
-    padding: 0px 10px;
-    margin: 5px 5px;
-    font-size: 1rem;
-    font-weight: 600;
-  }
-}
-
 /**|| Discover Post Opened CSS End ||**/
 /**|| Discover Post Opened Model CSS Start ||**/
 .discoverPosts .modalHeader {
@@ -2988,6 +2926,10 @@ s .multiplePostRight .multiplePostimg {
   color: #0d1b1d;
 }
 
+.discoverFeed {
+  display: flex;
+}
+
 .discoverFeed .discoverModelProf {
   width: 54px;
 }
@@ -2998,14 +2940,7 @@ s .multiplePostRight .multiplePostimg {
 
 .discoverFeed {
   display: flex;
-  justify-content: center;
-}
-
-@media only screen and (max-width: 768px) {
-
-  .discoverFeed {
-    width: 100% !important;
-  }
+  gap: 14px;
 }
 
 /**|| Discover Post Opened Model CSS End ||**/
@@ -3037,30 +2972,48 @@ s .multiplePostRight .multiplePostimg {
   height: calc(100vh - 140px);
 }
 
-.messageChatBox .messageChatLeft {
+/* .messageChatBox .messageChatLeft {
   width: 45%;
   background-color: #fff;
   box-shadow: 0px 3px 4px rgb(0 0 0 / 5%);
   border-radius: 15px 15px 0px 0px;
+} */
+
+.messageChatBox .messageChatLeft {
+  width: 35%;
+  background-color: #fff;
+  box-shadow: 0px 3px 4px rgb(0 0 0 / 5%);
 }
 
 .messageChatBox .messageChatLeft,
 .messageChatBox {
-  height: calc(100vh - 100px);
+  height: calc(100vh - 120px);
+}
+
+.messageHeading {
+  padding: 0.75rem;
+  border-bottom: 1px solid #00000014;
+}
+
+.messageHeading h5 {
+  font-size: 1.0rem;
 }
 
 .messageChatLeftHead {
-  padding: 24px;
+  /* padding: 24px; */
+  padding: 0.75rem;
+  border-bottom: 1px solid #00000014;
 }
 
 .messageChatLeftHeadSearch {
-  width: calc(100% - 33px);
+  /*width: calc(100% - 33px);*/
+  width: 100%;
 }
 
 .messageChatLeftHeadIcon {
-  width: 33px;
+  width: 24px;
 }
-
+/* 
 .messageChatBox .messageChatRight {
   width: 55%;
   height: calc(100vh - 100px);
@@ -3073,6 +3026,21 @@ s .multiplePostRight .multiplePostimg {
   display: flex;
   width: 100%;
   gap: 32px;
+} 
+
+*/
+
+.messageChatBox .messageChatRight {
+  width: 50%;
+  height: calc(100vh - 120px);
+  background-color: #fff;
+  box-shadow: 0px 3px 4px rgb(0 0 0 / 5%);
+}
+
+.messageChatBox {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 
 .userProfileInner .userProfileImg img {
@@ -3156,10 +3124,10 @@ s .multiplePostRight .multiplePostimg {
   width: calc(100% - 48px);
 }
 
-.messageChatRightHead,
+/* .messageChatRightHead,
 .messageChatLeftHead {
   height: 97px;
-}
+} */
 
 .notificationBadge {
   background: #04747d;
@@ -3490,7 +3458,7 @@ s .multiplePostRight .multiplePostimg {
   padding: 8px 12px;
 }
 
-.search_userCompose>a {
+.search_userCompose > a {
   text-decoration: none;
   display: block;
 }
@@ -3515,7 +3483,7 @@ s .multiplePostRight .multiplePostimg {
   font-size: var(--s12);
 }
 
-.search_userCompose>a:hover {
+.search_userCompose > a:hover {
   background: rgba(4, 117, 107, 0.1);
 }
 
@@ -3611,7 +3579,7 @@ s .multiplePostRight .multiplePostimg {
   padding: 10px 0 18px;
 }
 
-.loginLogo>img {
+.loginLogo > img {
   max-width: 50px;
 }
 
@@ -3688,7 +3656,7 @@ s .multiplePostRight .multiplePostimg {
   border-radius: 15px 15px 0 0;
 }
 
-.about_profile .profilePic>img {
+.about_profile .profilePic > img {
   width: 148px;
   height: 148px;
 }
@@ -3786,14 +3754,14 @@ s .multiplePostRight .multiplePostimg {
   line-height: 36px;
 }
 
-.userprof_btns .btnColor>img {
+.userprof_btns .btnColor > img {
   width: 18px;
 }
 
 .usercontentBox {
   padding-bottom: 20px;
   margin: 0 40px;
-  border-bottom: 1px solid #d1d1d1;
+  border-bottom: 1px solid #c8c8c8;
   gap: 20px;
   margin-top: 90px;
 }
@@ -3877,7 +3845,7 @@ a:hover {
   height: 200px;
 }
 
-.edit_profile .about_profile .profilePic>img {
+.edit_profile .about_profile .profilePic > img {
   width: 100px;
   height: 100px;
 }
@@ -3917,7 +3885,7 @@ a:hover {
   top: -20px;
 }
 
-.profileform_btn>a {
+.profileform_btn > a {
   padding: 0px 30px !important;
   line-height: 32px;
   font-size: var(--s16);
@@ -4027,7 +3995,7 @@ div#image-cropper-result img {
   padding: 25px 0 10px;
 }
 
-.progress_range>img {
+.progress_range > img {
   vertical-align: text-bottom;
 }
 
@@ -4069,11 +4037,7 @@ div#image-cropper-result img {
 }
 
 .chrome input {
-  background: linear-gradient(to right,
-      #00808b 0%,
-      #00808b 50%,
-      #d1d1d1 50%,
-      #d1d1d1 100%);
+  background: linear-gradient(to right, #00808b 0%, #00808b 50%, #d1d1d1 50%, #d1d1d1 100%);
   border: solid 1px #00808b;
   border-radius: 8px;
   height: 7px;
@@ -4280,7 +4244,7 @@ div#image-cropper-result img {
   margin-top: 8px;
 }
 
-.logInform input.is-invalid~.hideLoginPass {
+.logInform input.is-invalid ~ .hideLoginPass {
   display: none;
 }
 
@@ -4307,8 +4271,7 @@ div#image-cropper-result img {
   -webkit-appearance: none;
   background-color: transparent;
   border: 2px solid #00808b;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
-    inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
   padding: 9px;
   display: inline-block;
   position: relative;
@@ -4317,7 +4280,7 @@ div#image-cropper-result img {
   margin-right: 5px;
 }
 
-.agreementLogin input:checked+label:before {
+.agreementLogin input:checked + label:before {
   background: #00808b;
 }
 
@@ -4325,7 +4288,7 @@ div#image-cropper-result img {
   padding-top: 0 !important;
 }
 
-.agreementLogin input:checked+label:after {
+.agreementLogin input:checked + label:after {
   content: "";
   display: block;
   position: absolute;
@@ -4402,7 +4365,7 @@ div#image-cropper-result img {
   margin-bottom: 0;
 }
 
-.notA_member>h5 {
+.notA_member > h5 {
   margin: 0px 32px;
   font-weight: 500;
   font-size: var(--s14);
@@ -4663,7 +4626,7 @@ div#image-cropper-result img {
   display: none;
 }
 
-.tooltipBtn>.editComm_btn {
+.tooltipBtn > .editComm_btn {
   color: #0d1b1d;
 }
 
@@ -4908,7 +4871,7 @@ div#image-cropper-result img {
   top: 320px;
 }
 
-.tooltipBtn>.editComm_btn {
+.tooltipBtn > .editComm_btn {
   height: 38px;
 }
 
@@ -4982,17 +4945,17 @@ div#image-cropper-result img {
   background: #c1cccb;
 }
 
-.btn-check:active+.btn-primary:focus,
-.btn-check:checked+.btn-primary:focus,
+.btn-check:active + .btn-primary:focus,
+.btn-check:checked + .btn-primary:focus,
 .btn-primary.active:focus,
 .btn-primary:active:focus,
-.show>.btn-primary.dropdown-toggle:focus,
+.show > .btn-primary.dropdown-toggle:focus,
 .btn,
-.btn-check:active+.btn-primary:focus,
-.btn-check:checked+.btn-primary:focus,
+.btn-check:active + .btn-primary:focus,
+.btn-check:checked + .btn-primary:focus,
 .btn-primary.active:focus,
 .btn-primary:active:focus,
-.show>.btn-primary.dropdown-toggle:focus {
+.show > .btn-primary.dropdown-toggle:focus {
   box-shadow: unset !important;
 }
 
@@ -5029,7 +4992,7 @@ div#image-cropper-result img {
   box-shadow: 0px 26px 32px rgb(0 0 0 / 10%);
 }
 
-.allMsgUser>a {
+.allMsgUser > a {
   text-decoration: none;
   color: #212529 !important;
 }
@@ -5081,18 +5044,9 @@ div#image-cropper-result img {
     border-color:#04747D;
 } */
 .mostRecent .btn {
-  margin-top: 20%;
   font-weight: 600;
   font-size: 14px;
   line-height: 20px;
-}
-
-@media only screen and (max-width: 768px) {
-
-  .mostRecent .btn {
-    margin-top: 1%;
-    font-size: 11px;
-  }
 }
 
 .editComm_btn:hover {

@@ -174,10 +174,8 @@ export default function PostDetail() {
 
   const updatePostAfterReaction = (mode, postId, data) => {
     if (mode === "inc") {
-
       getPost();
     } else {
-
       getPost();
     }
   }
@@ -274,7 +272,7 @@ export default function PostDetail() {
                       <div className="discoverModelProf">
                         <div className="feedBoxprofImg">
                           <Link to={"/userprofile/" + post?.createdBy?._id}>
-                            <ProfileImage url={post?.createdBy?.profile_img} />
+                            <ProfileImage url={post?.createdBy?.profile_img !== "" ? post?.createdBy?.profile_img : "/images/profile/default-profile.png"} />
                           </Link>
                         </div>
                       </div>
@@ -334,15 +332,15 @@ export default function PostDetail() {
                               </SecureLink>
                             )}
                           >
-                            <p className="mb-0">
-                              {post?.message.slice(0, 250)}...{" "}
+                            <div className="mb-0">
+                              <div dangerouslySetInnerHTML={{ __html: post?.message.slice(0, 250) + "..." }} />
                               <a
                                 href="javascript:void(0);"
                                 onClick={() => setShowMoreList([...showMoreList, post?._id])}
                               >
                                 Show More
                               </a>
-                            </p>
+                            </div>
                           </Linkify>
                         ) : (
                           <Linkify
@@ -352,15 +350,15 @@ export default function PostDetail() {
                               </SecureLink>
                             )}
                           >
-                            <p className="mb-0">
-                              {post?.message}...{" "}
+                            <div className="mb-0">
+                              <div dangerouslySetInnerHTML={{ __html: post?.message + "..." }} />
                               <a
                                 href="javascript:void(0);"
                                 onClick={() => setShowMoreList(showMoreList.filter((i) => i !== post?._id))}
                               >
                                 Show Less
                               </a>
-                            </p>
+                            </div>
                           </Linkify>
                         )
                       ) : (
@@ -371,7 +369,7 @@ export default function PostDetail() {
                             </SecureLink>
                           )}
                         >
-                          <p className="mb-0">{post?.message}</p>
+                          <div className="mb-0" dangerouslySetInnerHTML={{ __html: post?.message }} />
                         </Linkify>
                       )}
                     </div>

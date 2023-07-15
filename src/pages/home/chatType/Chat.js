@@ -20,8 +20,6 @@ const userServ = new UserService();
 let socket;
 // let chatCompare = [];
 
-
-
 export default function Chat({ setMediaFiles, setShowSentMsg }) {
   const navigate = useNavigate();
   const params = useParams();
@@ -110,7 +108,7 @@ export default function Chat({ setMediaFiles, setShowSentMsg }) {
     const interval = setInterval(getOnlineStatus, 5000);
     return () => clearInterval(interval);
   }, [chatList]);
-  
+
   const getOnlineStatus = async () => {
     try {
       let userList = [];
@@ -186,11 +184,10 @@ export default function Chat({ setMediaFiles, setShowSentMsg }) {
         setGetMessageData([...getMessageData, { id, oUser, users }]);
       }
     }
-    alert(id)
-    // setMUser(oUser);
+
     setChatId(id);
     setChatCompare([...chatCompare, id]);
-    // setUsers([...users]);
+
     socket.emit("joinChat", id);
     try {
       let obj = {
@@ -213,25 +210,10 @@ export default function Chat({ setMediaFiles, setShowSentMsg }) {
     setShowComposeMsgDkst(!showComposeMsgDkst);
   };
 
-  // const changeDate = (date) => {
-  //     setDate(date)
-  // }
-  // useEffect(() => {
-  // $('html').click(function (e) {
-  //     if (!$(e.target).hasClass('emojiPicker')) {
-  //         setShowEmoji(false)
-  //     }
-  // });
-  // document.body.addEventListener('click', () => setShowEmoji(false), true);
-  // })
-
   const handleNavigate = (e, url) => {
     e.preventDefault();
     navigate(url);
   };
-  // console.log(unreadCount);
-
-
 
   return (
     <>
