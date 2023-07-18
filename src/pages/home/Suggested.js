@@ -75,7 +75,7 @@ function Suggested() {
     try {
       let resp = await followerServ.sendFollowReq({ followingId: id });
       return resp.data;
-    } catch (err) { }
+    } catch (err) {}
   };
 
   return (
@@ -97,32 +97,38 @@ function Suggested() {
             return (
               <>
                 <div className="profileBox">
-                  <img
-                    src="/images/icons/close.svg"
-                    className="suggestClose"
-                    alt="close"
-                    onClick={() => deleteSuggestedHome(user._id)}
-                  />
-                  <img
-                    src={user?.profile_img ? user.profile_img : "/images/profile/default-profile.png"}
-                    alt="profile"
-                  />
-                  <span className="name">
-                    {user?.user_name?.length > 8
-                      ? user?.user_name?.slice(0, 8) + "..."
-                      : user.user_name}
-                  </span>
-                  <span className="title" style={{ whiteSpace: "pre-wrap" }}>
-                    {user?.title ? (
-                      user?.title?.length > 8 ? (
-                        user?.title?.slice(0, 10) + "..."
+                  <Link to={"/userprofile/" + user?._id}>
+                    <img
+                      src="/images/icons/close.svg"
+                      className="suggestClose"
+                      alt="close"
+                      onClick={() => deleteSuggestedHome(user._id)}
+                    />
+                    <img
+                      src={
+                        user?.profile_img
+                          ? user.profile_img
+                          : "/images/profile/default-profile.png"
+                      }
+                      alt="profile"
+                    />
+                    <span className="name">
+                      {user?.user_name?.length > 8
+                        ? user?.user_name?.slice(0, 8) + "..."
+                        : user.user_name}
+                    </span>
+                    <span className="title" style={{ whiteSpace: "pre-wrap" }}>
+                      {user?.title ? (
+                        user?.title?.length > 8 ? (
+                          user?.title?.slice(0, 10) + "..."
+                        ) : (
+                          user.title
+                        )
                       ) : (
-                        user.title
-                      )
-                    ) : (
-                      <> </>
-                    )}
-                  </span>
+                        <> </>
+                      )}
+                    </span>
+                  </Link>
                   {user.isFollowing === "following" ? (
                     <button className="follow">Following</button>
                   ) : user.isFollowing === "requested" ? (
@@ -136,7 +142,7 @@ function Suggested() {
                     >
                       Follow
                     </button>
-                  )}{" "}
+                  )}
                 </div>
                 <div className="border" style={{ height: "130px" }}></div>
               </>
@@ -169,7 +175,7 @@ function Suggested() {
             <input
               type="text"
               className="form-control"
-              placeholder="Search for users (User Name)"
+              placeholder="Search"
               name="search"
               onChange={handleSearch}
             />
@@ -211,7 +217,9 @@ function Suggested() {
                         <div className="profile-image">
                           <img
                             src={
-                              user?.profile_img ? user.profile_img : "/images/profile/default-profile.png"
+                              user?.profile_img
+                                ? user.profile_img
+                                : "/images/profile/default-profile.png"
                             }
                             alt="profile"
                           />

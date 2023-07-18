@@ -171,6 +171,7 @@ a {
 }
 
 .socialMediaTheme {
+  width: 100vw;
   background: #eee;
   min-height: 100vh;
   max-height: 100%;
@@ -403,11 +404,19 @@ a {
   content: none;
 }
 
-.owl-stage .owl-item.active.firstActiveItem .item .graphSliderItem .graphSliderInner {
+.owl-stage
+  .owl-item.active.firstActiveItem
+  .item
+  .graphSliderItem
+  .graphSliderInner {
   padding-left: 0;
 }
 
-.owl-stage .owl-item.active.lastActiveItem .item .graphSliderItem .graphSliderInner {
+.owl-stage
+  .owl-item.active.lastActiveItem
+  .item
+  .graphSliderItem
+  .graphSliderInner {
   padding-right: 0;
 }
 
@@ -2996,7 +3005,7 @@ s .multiplePostRight .multiplePostimg {
 }
 
 .messageHeading h5 {
-  font-size: 1.0rem;
+  font-size: 1rem;
 }
 
 .messageChatLeftHead {
@@ -4037,7 +4046,13 @@ div#image-cropper-result img {
 }
 
 .chrome input {
-  background: linear-gradient(to right, #00808b 0%, #00808b 50%, #d1d1d1 50%, #d1d1d1 100%);
+  background: linear-gradient(
+    to right,
+    #00808b 0%,
+    #00808b 50%,
+    #d1d1d1 50%,
+    #d1d1d1 100%
+  );
   border: solid 1px #00808b;
   border-radius: 8px;
   height: 7px;
@@ -4271,7 +4286,8 @@ div#image-cropper-result img {
   -webkit-appearance: none;
   background-color: transparent;
   border: 2px solid #00808b;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+    inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
   padding: 9px;
   display: inline-block;
   position: relative;
@@ -5055,7 +5071,8 @@ div#image-cropper-result img {
 }
 
 .editComm_btn:hover img {
-  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8);
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg)
+    saturate(600%) contrast(0.8);
 }
 
 .userprof_btns .editComm_btn:hover,
