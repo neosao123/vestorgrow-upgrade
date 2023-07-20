@@ -417,9 +417,15 @@ export default function DiscoverPost({ onClose, postId, slideLeft, slideRight, c
                                 {post?.likeCount > 0 ? (
                                   <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(post?._id)}>
                                     <div className="floating-reactions-container">
-                                      <span><img src="/images/icons/filled-thumbs-up.svg" alt="filled-thumbs-up" /></span>
-                                      <span><img src="/images/icons/filled-heart.svg" alt="filled-heart" /></span>
-                                      <span><img src="/images/icons/filled-insightfull.svg" alt="filled-insightfull" /></span>
+                                      {
+                                        post?.postReactions.includes("like") && <span><img src="/images/icons/filled-thumbs-up.svg" alt="filled-thumbs-up" /></span>
+                                      }
+                                      {
+                                        post?.postReactions.includes("love") && <span><img src="/images/icons/filled-heart.svg" alt="filled-heart" /></span>
+                                      }
+                                      {
+                                        post?.postReactions.includes("insight") && <span><img src="/images/icons/filled-insightfull.svg" alt="filled-insightfull" /></span>
+                                      }
                                     </div>
                                     <span className="mx-2">{countFormator(post?.likeCount)}</span>
                                   </div>
