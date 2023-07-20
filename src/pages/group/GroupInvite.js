@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import GlobalContext from "../../context/GlobalContext";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import ChatService from '../../services/chatService';
 import moment from 'moment';
 import InviteMembers from '../../popups/groupChat/InviteMembers';
@@ -10,7 +10,7 @@ const GroupInvite = ({ onClose, onFinish, groupId, onEdit }) => {
     const [groupDetail, setGroupDetail] = useState();
     const [showInviteMembers, setShowInviteMembers] = useState(false);
     const [showMemberList, setShowMemberList] = useState(false);
-
+    const navigate = useNavigate();
     const globalCtx = useContext(GlobalContext);
     const [user, setUser] = globalCtx.user;
     const serv = new ChatService();
@@ -20,12 +20,11 @@ const GroupInvite = ({ onClose, onFinish, groupId, onEdit }) => {
             let obj = {
                 groupId: groupId,
             };
-            await serv.joinGroup(obj).then((resp) => {
-                if (resp.message) {
-                    onFinish();
-                    console.log(resp.message)
-                }
-            });
+            const resp = await serv.joinGroup(obj);
+            if (resp.message) {
+                //onFinish();
+                navigate("/");
+            }
         } catch (err) {
             console.log(err);
         }
@@ -68,11 +67,10 @@ const GroupInvite = ({ onClose, onFinish, groupId, onEdit }) => {
         //   console.log(err);
         // }
     };
+
     useEffect(() => {
         getGroupDetails();
-
         localStorage.setItem("groupInviteId", id);
-
     }, [groupId]);
 
     return (
@@ -88,7 +86,12 @@ const GroupInvite = ({ onClose, onFinish, groupId, onEdit }) => {
                                 "borderRadius": "50%"
                             }} alt="" />
                         ) : (
-                            <img src="/images/icons/group-logo.svg" className="img-fluid w-100" alt="" />
+                            <img src="/images/icons/group-logo.svg" className="img-fluid" style={{
+                                "width": "96px",
+                                "height": "96px",
+                                "background": "#d9d9d9",
+                                "borderRadius": "50%"
+                            }} alt="" />
                         )}
                         <div className=" mb-3">
                             <p className="groupInfoName">{groupDetail?.chatName}</p>

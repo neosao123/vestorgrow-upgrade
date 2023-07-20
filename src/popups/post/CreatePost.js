@@ -32,7 +32,11 @@ function fetchUsers(query, callback) {
 
     serv.getMentionUsers(obj).then((res) => {
         if (res.data?.length > 0)
-            return res.data.map(user => ({ display: user.user_name, id: user._id, img: user.profile_img }))
+            return res.data.map(user => (
+                {
+                    display: user.user_name, id: user._id, img: user.profile_img, firstName: user.first_name ?? "", lastName: user.last_name ?? ""
+                }
+            ))
     }).then(callback);
 }
 
@@ -103,7 +107,7 @@ export default function CreatePost({ onClose, onSuccess, onFail }) {
                     formData.append("mediaFiles", element);
                 });
             }
-            
+
             await postServ.sendPost(formData).then((resp) => {
                 if (resp.data) {
                     onSuccess();
@@ -173,7 +177,10 @@ export default function CreatePost({ onClose, onSuccess, onFail }) {
     const CustomSuggestion = ({ suggestion, ...props }) => (
         <div {...props} style={{ padding: "5px", display: "flex", alignItems: "center" }}>
             <img src={props.img !== "" ? props.img : "/images/user.png"} alt={props.display} style={{ width: "32px", height: "32px", borderRadius: "16px", marginRight: "5px" }} />
-            <div style={{ fontSize: "1.0rem" }}>{props.display}</div>
+            <div>
+                <div style={{ fontSize: "1.0rem" }}>{props.display}</div>
+                <div style={{ fontSize: "0.8rem" }}>{props.firstName + " " + props.lastName}</div>
+            </div>
         </div>
     );
 
@@ -197,7 +204,7 @@ export default function CreatePost({ onClose, onSuccess, onFail }) {
                                                 <div className="selectWhoSeePost">
                                                     <div className="dropdown">
                                                         <button type="button" className="btn btn-primary" data-bs-toggle="dropdown">
-                                                            <span>{formik.values.shareType}</span>
+                                                            <span className="me-2">{formik.values.shareType}</span>
                                                             <img src="/images/icons/down-arrow-white.svg" alt="downarrow" className="img-fluid" />
                                                         </button>
                                                         <ul className="dropdown-menu">
@@ -775,8 +782,8 @@ export default function CreatePost({ onClose, onSuccess, onFail }) {
                             </div>
                         </div>
                     </div>
-                </div >
-            </div >
+                </div>
+            </div>
             <div className="modal-backdrop show"></div>
             {
                 isSubmit && (

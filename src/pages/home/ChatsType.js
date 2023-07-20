@@ -52,8 +52,7 @@ function ChatsType() {
   };
   return (
     <>
-
-      <div className="feedChatBox stickyChatBox">
+      <div className="feedChatBox">
         <div className="feedChatHead feedChatHeadCustom">
           <div className="feedChatHeadInner">
             <ul className="feedChatHeadLeft nav">

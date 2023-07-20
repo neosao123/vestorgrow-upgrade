@@ -55,7 +55,7 @@ export default function FollowerFollowingList({ onClose, post, type }) {
         .sendFollowReq(obj)
         .then((resp) => {
           if (resp.data) {
-            getFollowerList(); 
+            getFollowerList();
           }
         })
         .catch((err) => {
@@ -110,7 +110,7 @@ export default function FollowerFollowingList({ onClose, post, type }) {
                     <ul className="nav nav-pills">
                       <li className="nav-item">
                         <a
-                          className={"nav-link " + (userType == "follower" ? "active" : "")}
+                          className={"nav-link " + (userType === "follower" ? "active" : "")}
                           onClick={() => {
                             setUserList([]);
                             setUserType("follower");
@@ -122,7 +122,7 @@ export default function FollowerFollowingList({ onClose, post, type }) {
                       </li>
                       <li className="nav-item">
                         <a
-                          className={"nav-link " + (userType == "following" ? "active" : "")}
+                          className={"nav-link " + (userType === "following" ? "active" : "")}
                           onClick={() => {
                             setUserList([]);
                             setUserType("following");

@@ -16,6 +16,7 @@ import ImageCarousel from "../../popups/imageCarousel/ImageCarousel";
 import Unfollow from "../../popups/unfollow/Unfollow";
 import UserLikedPost from "../../popups/post/UserLikedPost";
 import UserSharedPost from "../../popups/post/UserSharedPost";
+import HelperFunctions from "../../services/helperFunctions";
 import ReportService from "../../services/reportService";
 import Linkify from "react-linkify";
 import { SecureLink } from "react-secure-link";
@@ -31,34 +32,21 @@ import Playeryoutube from "../../components/Playeryoutube";
 import SharedPost from "../../components/SharedPost";
 import OriginalPostCreator from "../../components/OriginalPostCreator";
 
-const isImage = [
-  "gif",
-  "jpg",
-  "jpeg",
-  "png",
-  "svg",
-  "HEIC",
-  "heic",
-  "webp",
-  "jfif",
-  "pjpeg",
-  "pjp",
-  "avif",
-  "apng",
-];
+const isImage = ["gif", "jpg", "jpeg", "png", "svg", "HEIC", "heic", "webp", "jfif", "pjpeg", "pjp", "avif", "apng"];
 
 const Posts = () => {
+
   const postServ = new PostService();
   const followerServ = new UserFollowerService();
   const blockedServ = new UserBlockedServ();
   const reportServ = new ReportService();
+  const helperServ = new HelperFunctions();
   const globalCtx = useContext(GlobalContext);
   const [user, setUser] = globalCtx.user;
   const [createPostPopup, setCreatePostPopup] = globalCtx.createPostPopup;
   const [postSuccessPopup, setPostSuccessPopup] = globalCtx.postSuccessPopup;
   const [postFailPopup, setPostFailPopup] = globalCtx.postFailPopup;
-  const [showCommentPostList, setShowCommentPostList] =
-    globalCtx.showCommentPostList;
+  const [showCommentPostList, setShowCommentPostList] = globalCtx.showCommentPostList;
   // const [showCommentPostList, setShowCommentPostList] = useState([])
   const [showSharePost, setShowSharePost] = useState(false);
   const [dataForSharePost, setDataForSharePost] = useState(null);
@@ -74,10 +62,8 @@ const Posts = () => {
   const [showReportPopup, setShowReportPopup] = useState(false);
   const [showLoadingBar, setShowLoadingBar] = useState(false);
   const [reportData, setReportData] = useState(null);
-  const [showOtherPostSharedPopup, setShowOtherPostSharedPopup] =
-    useState(false);
-  const [showOtherPostFailedPopup, setShowOtherPostFailedPopup] =
-    useState(false);
+  const [showOtherPostSharedPopup, setShowOtherPostSharedPopup] = useState(false);
+  const [showOtherPostFailedPopup, setShowOtherPostFailedPopup] = useState(false);
   const [postCount, setPostCount] = useState(0);
   const [search, setSearch] = useState({
     filter: {
@@ -87,8 +73,7 @@ const Posts = () => {
     length: 20,
   });
   let twitterurl = "http://twitter.com/share?text=vestorgrow home page&url=";
-  let facebookurl =
-    "https://www.facebook.com/sharer/sharer.php?t=vestorgrow home page&u=";
+  let facebookurl = "https://www.facebook.com/sharer/sharer.php?t=vestorgrow home page&u=";
   let mailto = `mailto:${user?.email}?subject=Vestorgrow!!!&body=`;
   // let link = encodeURI(window.location.origin + "/post")
   let loading = false;
@@ -115,10 +100,12 @@ const Posts = () => {
     } else {
       return counter.toString();
     }
-  };
+  }
 
   useEffect(() => {
-    getPostList();
+    setTimeout(() => {
+      getPostList();
+    }, 1000);
   }, [postSuccessPopup, search]);
 
   const getPostList = async () => {
@@ -129,11 +116,7 @@ const Posts = () => {
       let resp = await postServ.myFeed(obj);
       console.log(resp.data[0]);
       if (resp.data) {
-        setPostList(
-          postList.length > 0 && search.start !== 0
-            ? [...postList, ...resp.data]
-            : resp.data
-        );
+        setPostList(postList.length > 0 && search.start !== 0 ? [...postList, ...resp.data] : resp.data);
         setPostCount(resp.total);
       }
       //}
@@ -144,8 +127,7 @@ const Posts = () => {
 
   const options = {
     formatHref: {
-      mention: (href) =>
-        process.env.REACT_APP_API_BASEURL + "/userprofile/profiles" + href,
+      mention: (href) => process.env.REACT_APP_API_BASEURL + "/userprofile/profiles" + href,
     },
   };
 
@@ -215,7 +197,7 @@ const Posts = () => {
       _postList[_postListIdx].reaction = {
         _id: data._id,
         postId: data.postId,
-        type: data.type,
+        type: data.type
       };
       _postList[_postListIdx].isLiked = true;
       _postList[_postListIdx].postReactions = uniqueReactions;
@@ -230,7 +212,7 @@ const Posts = () => {
       _postList[_postListIdx].postReactions = uniqueReactions;
       setPostList([..._postList]);
     }
-  };
+  }
 
   const handleSharePost = async (postIdx, shareType) => {
     let post = postList[postIdx];
@@ -283,12 +265,17 @@ const Posts = () => {
 
   document.body.addEventListener("click", () => setShowShareTo(false), true);
 
-  // check youtube video url
+  // check youtube video url 
   const matchYoutubeUrl = (url) => {
-    var p =
-      /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-    return url.match(p) ? true : false;
-  };
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? true : false;
+  }
+
+  // const extractYouTubeURL = (text) => {
+  //   const youtubeURLRegex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/\S+/gi;
+  //   const matches = text.match(youtubeURLRegex);
+  //   return matches ? matches[0] : null;
+  // }
 
   return (
     <>
@@ -297,35 +284,19 @@ const Posts = () => {
           <div className="new-post_custom-divInner-top"></div>
           <div className="new-post_custom-divInner">
             <div className="bgWhiteCard addPhotoVideoPost d-none d-md-block sticky-top-custom">
-              <div
-                className="youMind youMindCustom"
-                onClick={handleCreatePostPopup}
-                style={{ cursor: "pointer" }}
-              >
+              <div className="youMind youMindCustom" onClick={handleCreatePostPopup} style={{ cursor: "pointer" }}>
                 <div className="putStatus d-flex align-items-center">
                   <div className="youMindProf">
-                    <ProfileImage
-                      url={user?.profile_img}
-                      style={{ borderRadius: "80px" }}
-                    />
+                    <ProfileImage url={user?.profile_img} style={{ borderRadius: "80px" }} />
                   </div>
                   <div className="youMindTxtWrite">
-                    <div
-                      className="form-control"
-                      style={{ borderRadius: "25px" }}
-                    >
-                      Create a post
-                    </div>
+                    <div className="form-control" style={{ borderRadius: "25px" }}>Create a post</div>
                   </div>
                 </div>
                 <div className="postFile p-0">
                   <div className="addPhoto">
                     <Link className="btn">
-                      <img
-                        src="/images/icons/image.svg"
-                        alt="img-icon"
-                        className="img-fluid"
-                      />
+                      <img src="/images/icons/image.svg" alt="img-icon" className="img-fluid" />
                       <span>Add Photo/Video</span>
                     </Link>
                   </div>
@@ -338,14 +309,10 @@ const Posts = () => {
           postList.map((item, idx) => {
             let date = new Date();
             const originalPostId = item.originalPostId ?? null;
-            item.duration = moment.duration(
-              moment(date).diff(moment(item.createdAt))
-            );
+            item.duration = moment.duration(moment(date).diff(moment(item.createdAt)));
             let postReactions = item.postReactions ?? [];
-            const profileImage =
-              item.createdBy?.profile_img !== ""
-                ? item.createdBy.profile_img
-                : "/images/profile/default-profile.png";
+            const profileImage = item.createdBy?.profile_img !== "" ? item.createdBy.profile_img : "/images/profile/default-profile.png";
+            const youtubeURL = helperServ.extractYouTubeURL(item.message);
             return item.isHidden ? (
               <div className="bgDarkCard postHidden d-none d-md-block">
                 <div className="postHiddenInner d-flex align-items-center">
@@ -363,11 +330,7 @@ const Posts = () => {
                   </div>
                   <div className="postHiddenClose">
                     <NavLink onClick={() => unhidePost(item._id)}>
-                      <img
-                        src="/images/icons/close-white.svg"
-                        alt="close-white"
-                        className="img-fluid"
-                      />
+                      <img src="/images/icons/close-white.svg" alt="close-white" className="img-fluid" />
                     </NavLink>
                   </div>
                 </div>
@@ -375,54 +338,33 @@ const Posts = () => {
             ) : (
               <div className="bgWhiteCard feedBox" key={idx}>
                 <div className="feedBoxInner">
-                  <OriginalPostCreator
-                    originalPostData={item.originalPostId}
-                    createdByUser={item.createdBy}
-                    createdAt={item.createdAt}
-                  />
+                  <OriginalPostCreator originalPostData={item.originalPostId} createdByUser={item.createdBy} createdAt={item.createdAt} />
                   <div className="feedBoxHead d-flex align-items-center">
                     <div className="feedBoxHeadLeft">
                       <div className="feedBoxprofImg">
-                        <NavLink
-                          to={
-                            item.createdBy !== null
-                              ? "/userprofile/" + item.createdBy?._id
-                              : ""
-                          }
-                        >
-                          <ProfileImage
-                            url={profileImage}
-                            style={{ borderRadius: "30px" }}
-                          />
+                        <NavLink to={(item.createdBy !== null) ? "/userprofile/" + item.createdBy?._id : ""}>
+                          <ProfileImage url={profileImage} style={{ borderRadius: "30px" }} />
                         </NavLink>
                       </div>
                       <div className="feedBoxHeadName">
-                        <NavLink
-                          to={
-                            item.createdBy !== null
-                              ? "/userprofile/" + item.createdBy?._id
-                              : ""
-                          }
-                        >
-                          <h4
-                            className="username-title-custom"
-                            title={item?.createdBy?.user_name}
-                          >
-                            {item?.createdBy?.user_name.length > 25
-                              ? item?.createdBy?.user_name.slice(0, 25) + "..."
-                              : item?.createdBy?.user_name}
-                            {item.createdBy?.role.includes("userPaid") ? (
-                              <img
-                                src="/images/icons/green-tick.svg"
-                                alt="green-tick"
-                                className="mx-1"
-                              />
-                            ) : (
-                              <span className="mx-1"></span>
-                            )}
-                            {originalPostId !== null && (
-                              <span className="repostedCustom">Reposted</span>
-                            )}
+                        <NavLink to={(item.createdBy !== null) ? "/userprofile/" + item.createdBy?._id : ""}>
+                          <h4 className="username-title-custom" title={item?.createdBy?.user_name}>
+                            {
+                              item?.createdBy?.user_name.length > 25
+                                ? item?.createdBy?.user_name.slice(0, 25) + "..."
+                                : item?.createdBy?.user_name}
+                            {
+                              item.createdBy?.role.includes("userPaid") ? (
+                                <img src="/images/icons/green-tick.svg" alt="green-tick" className="mx-1" />
+                              ) : (
+                                <span className="mx-1"></span>
+                              )
+                            }
+                            {
+                              (originalPostId !== null) && (
+                                <span className="repostedCustom">Reposted</span>
+                              )
+                            }
                           </h4>
                         </NavLink>
                         <p>
@@ -435,80 +377,44 @@ const Posts = () => {
                     <div className="feedBoxHeadRight ms-auto">
                       <div className="feedBoxHeadDropDown">
                         <a className="nav-link" data-bs-toggle="dropdown">
-                          <img
-                            src="/images/icons/dots.svg"
-                            alt="dots"
-                            className="img-fluid"
-                          />
+                          <img src="/images/icons/dots.svg" alt="dots" className="img-fluid" />
                         </a>
                         <ul className="dropdown-menu opts">
                           <li>
                             <div
-                              className="dropdown-item"
-                              onClick={() => setShowShareTo(item._id)}
-                            >
-                              <img
-                                src="/images/icons/share.svg"
-                                alt="hide-icon"
-                                className="img-fluid"
-                              />{" "}
-                              Share to
+                              className="dropdown-item" onClick={() => setShowShareTo(item._id)}>
+                              <img src="/images/icons/share.svg" alt="hide-icon" className="img-fluid" /> Share to
                             </div>
                           </li>
                           <li>
-                            <div
-                              className="dropdown-item"
+                            <div className="dropdown-item"
                               onClick={() =>
-                                navigator.clipboard.writeText(
-                                  encodeURI(
-                                    window.location.origin + "/post/" + item._id
-                                  )
-                                )
+                                navigator.clipboard.writeText(encodeURI(window.location.origin + "/post/" + item._id))
                               }
                             >
-                              <img
-                                src="/images/icons/link.svg"
-                                alt="hide-icon"
-                                className="img-fluid"
-                              />{" "}
-                              Copy Link
+                              <img src="/images/icons/link.svg" alt="hide-icon" className="img-fluid" /> Copy
+                              Link
                             </div>
                           </li>
                           <li>
-                            <div
-                              onClick={() => hidePost(item._id)}
-                              className="dropdown-item"
+                            <div onClick={() => hidePost(item._id)} className="dropdown-item"
                             >
-                              <img
-                                src="/images/icons/hide-icon.svg"
-                                alt="hide-icon"
-                                className="img-fluid"
-                              />
+                              <img src="/images/icons/hide-icon.svg" alt="hide-icon" className="img-fluid" />
                               Hide Post
                             </div>
                           </li>
-                          {item?.createdBy?._id === user._id && (
+                          {(item?.createdBy?._id === user._id) && (
                             <li>
-                              <div
-                                onClick={() => deletePost(item._id)}
-                                className="dropdown-item"
-                              >
-                                <img
-                                  src="/images/icons/delete.svg"
-                                  alt="hide-icon"
-                                  className="img-fluid"
-                                />
+                              <div onClick={() => deletePost(item._id)} className="dropdown-item">
+                                <img src="/images/icons/delete.svg" alt="hide-icon" className="img-fluid" />
                                 Delete
                               </div>
                             </li>
                           )}
-                          {item?.createdBy?._id !== user._id && (
+                          {(item?.createdBy?._id !== user._id) && (
                             <>
                               <li>
-                                <div
-                                  onClick={() => handleReportRequest(item._id)}
-                                  className="dropdown-item"
-                                >
+                                <div onClick={() => handleReportRequest(item._id)} className="dropdown-item">
                                   <img
                                     src="/images/icons/report-post.svg"
                                     alt="report-post"
@@ -519,19 +425,10 @@ const Posts = () => {
                               </li>
                               <li>
                                 <div
-                                  onClick={() =>
-                                    handleUnFollowRequest(
-                                      item.createdBy._id,
-                                      item.createdBy.user_name
-                                    )
-                                  }
+                                  onClick={() => handleUnFollowRequest(item.createdBy._id, item.createdBy.user_name)}
                                   className="dropdown-item"
                                 >
-                                  <img
-                                    src="/images/icons/add-user.svg"
-                                    alt="add-user"
-                                    className="img-fluid"
-                                  />
+                                  <img src="/images/icons/add-user.svg" alt="add-user" className="img-fluid" />
                                   Unfollow
                                 </div>
                               </li>
@@ -541,8 +438,7 @@ const Posts = () => {
                                   onClick={() => blockUser(item.createdBy._id)}
                                   className="dropdown-item"
                                 >
-                                  <i className="fa-solid fa-user-lock me-1"></i>{" "}
-                                  Block
+                                  <i className="fa-solid fa-user-lock me-1"></i> Block
                                 </a>
                               </li>
                             </>
@@ -551,8 +447,7 @@ const Posts = () => {
                         <div className="dropdown">
                           <ul
                             className={
-                              "dropdown-menu opts dropdown-menuMore-custom" +
-                              (showShareTo === item._id ? " show" : "")
+                              "dropdown-menu opts dropdown-menuMore-custom" + (showShareTo === item._id ? " show" : "")
                             }
                             aria-labelledby="dropdownMenuShareTo"
                             id="dropdownMenuShareTo"
@@ -562,9 +457,7 @@ const Posts = () => {
                                 className="dropdown-item"
                                 href="javascript:void(0);"
                                 onClick={() =>
-                                  navigator.clipboard.writeText(
-                                    window.location.origin + "/post/" + item._id
-                                  )
+                                  navigator.clipboard.writeText(window.location.origin + "/post/" + item._id)
                                 }
                               >
                                 <img
@@ -578,12 +471,7 @@ const Posts = () => {
                             <li>
                               <a
                                 className="dropdown-item dropdown-item-fbCustom"
-                                href={
-                                  facebookurl +
-                                  encodeURI(
-                                    window.location.origin + "/post/" + item._id
-                                  )
-                                }
+                                href={facebookurl + encodeURI(window.location.origin + "/post/" + item._id)}
                                 target="_blank"
                               >
                                 <img
@@ -597,12 +485,7 @@ const Posts = () => {
                             <li>
                               <a
                                 className="dropdown-item"
-                                href={
-                                  twitterurl +
-                                  encodeURI(
-                                    window.location.origin + "/post/" + item._id
-                                  )
-                                }
+                                href={twitterurl + encodeURI(window.location.origin + "/post/" + item._id)}
                                 target="_blank"
                               >
                                 <img
@@ -616,12 +499,7 @@ const Posts = () => {
                             <li>
                               <a
                                 className="dropdown-item"
-                                href={
-                                  mailto +
-                                  encodeURI(
-                                    window.location.origin + "/post/" + item._id
-                                  )
-                                }
+                                href={mailto + encodeURI(window.location.origin + "/post/" + item._id)}
                                 target="_blank"
                               >
                                 <img
@@ -647,11 +525,7 @@ const Posts = () => {
                     >
                       {isImage.includes(item.mediaFiles[0].split(".").pop()) ? (
                         <div className="position-relative">
-                          <img
-                            src={item.mediaFiles[0]}
-                            alt="post-img"
-                            className="img-fluid"
-                          />
+                          <img src={item.mediaFiles[0]} alt="post-img" className="img-fluid" />
                           <div className="overLay overLayCustomBody">
                             <span className="overLayCustom">
                               <i className="fa-solid fa-up-right-and-down-left-from-center"></i>
@@ -660,10 +534,7 @@ const Posts = () => {
                         </div>
                       ) : (
                         <div className="position-relative video-thumbnailCustom">
-                          <VideoImageThumbnail
-                            videoUrl={item.mediaFiles[0]}
-                            alt="video"
-                          />
+                          <VideoImageThumbnail videoUrl={item.mediaFiles[0]} alt="video" />
                           <div className="overLay">
                             <span className="overLayCustom">
                               <i className="fa-solid fa-film"></i>
@@ -682,15 +553,9 @@ const Posts = () => {
                           setImageIdx(0);
                         }}
                       >
-                        {isImage.includes(
-                          item.mediaFiles[0].split(".").pop()
-                        ) ? (
+                        {isImage.includes(item.mediaFiles[0].split(".").pop()) ? (
                           <div className="position-relative h-100">
-                            <img
-                              src={item.mediaFiles[0]}
-                              alt="post-img"
-                              className="img-fluid"
-                            />
+                            <img src={item.mediaFiles[0]} alt="post-img" className="img-fluid" />
                             <div className="overLay overLayCustomBody">
                               <span className="overLayCustom">
                                 <i className="fa-solid fa-up-right-and-down-left-from-center"></i>
@@ -723,15 +588,9 @@ const Posts = () => {
                               }}
                             >
                               {/* <img src={item.mediaFiles[1]} alt="profile-img" className="img-fluid" /> */}
-                              {isImage.includes(
-                                item.mediaFiles[1].split(".").pop()
-                              ) ? (
+                              {isImage.includes(item.mediaFiles[1].split(".").pop()) ? (
                                 <div className="position-relative h-100">
-                                  <img
-                                    src={item.mediaFiles[1]}
-                                    alt="post-img"
-                                    className="img-fluid"
-                                  />
+                                  <img src={item.mediaFiles[1]} alt="post-img" className="img-fluid" />
                                   <div className="overLay overLayCustomBody">
                                     <span className="overLayCustom">
                                       <i className="fa-solid fa-up-right-and-down-left-from-center"></i>
@@ -762,9 +621,7 @@ const Posts = () => {
                             >
                               <a href="javascript:void(0)">
                                 {/* <img src={item.mediaFiles[2]} alt="profile-img" className="img-fluid" /> */}
-                                {isImage.includes(
-                                  item.mediaFiles[2].split(".").pop()
-                                ) ? (
+                                {isImage.includes(item.mediaFiles[2].split(".").pop()) ? (
                                   <img
                                     src={item.mediaFiles[2]}
                                     alt="post-img"
@@ -801,9 +658,7 @@ const Posts = () => {
                                 setImageIdx(1);
                               }}
                             >
-                              {isImage.includes(
-                                item.mediaFiles[1].split(".").pop()
-                              ) ? (
+                              {isImage.includes(item.mediaFiles[1].split(".").pop()) ? (
                                 <div className="position-relative">
                                   <img
                                     src={item.mediaFiles[1]}
@@ -842,27 +697,17 @@ const Posts = () => {
                       !showMoreList.includes(item._id) ? (
                         <Linkify
                           options={options}
-                          componentDecorator={(
-                            decoratedHref,
-                            decoratedText,
-                            key
-                          ) => (
+                          componentDecorator={(decoratedHref, decoratedText, key) => (
                             <SecureLink href={decoratedHref} key={key}>
                               {decoratedText}
                             </SecureLink>
                           )}
                         >
                           <div className="mb-0 whiteSpace p-aligment-wrap">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: item.message.slice(0, 500) + "... ",
-                              }}
-                            />
+                            <div dangerouslySetInnerHTML={{ __html: item.message.slice(0, 500) + "... " }} />
                             <a
                               href="javascript:void(0);"
-                              onClick={() =>
-                                setShowMoreList([...showMoreList, item._id])
-                              }
+                              onClick={() => setShowMoreList([...showMoreList, item._id])}
                             >
                               Show More
                             </a>
@@ -871,27 +716,17 @@ const Posts = () => {
                       ) : (
                         <Linkify
                           options={options}
-                          componentDecorator={(
-                            decoratedHref,
-                            decoratedText,
-                            key
-                          ) => (
+                          componentDecorator={(decoratedHref, decoratedText, key) => (
                             <SecureLink href={decoratedHref} key={key}>
                               {decoratedText}
                             </SecureLink>
                           )}
                         >
                           <div className="mb-0 whiteSpace p-aligment-wrap">
-                            <div
-                              dangerouslySetInnerHTML={{ __html: item.message }}
-                            />
+                            <div dangerouslySetInnerHTML={{ __html: item.message }} />
                             <a
                               href="javascript:void(0);"
-                              onClick={() =>
-                                setShowMoreList(
-                                  showMoreList.filter((i) => i !== item._id)
-                                )
-                              }
+                              onClick={() => setShowMoreList(showMoreList.filter((i) => i !== item._id))}
                             >
                               Show Less
                             </a>
@@ -901,85 +736,50 @@ const Posts = () => {
                     ) : (
                       <Linkify
                         options={options}
-                        componentDecorator={(
-                          decoratedHref,
-                          decoratedText,
-                          key
-                        ) => (
+                        componentDecorator={(decoratedHref, decoratedText, key) => (
                           <SecureLink href={decoratedHref} key={key}>
                             {decoratedText}
                           </SecureLink>
                         )}
                       >
-                        {matchYoutubeUrl(item.message) ? (
-                          <></>
-                        ) : (
-                          <div
-                            className="mb-0 whiteSpace p-aligment-wrap"
-                            dangerouslySetInnerHTML={{ __html: item.message }}
-                          />
-                        )}
+                        {
+                          (matchYoutubeUrl(item.message)) ? (
+                            <></>
+                          ) : (
+                            <div className="mb-0 whiteSpace p-aligment-wrap" dangerouslySetInnerHTML={{ __html: item.message }} />
+                          )
+                        }
                       </Linkify>
                     )}
-                    {/* <p className="mb-0">{item?.message}</p> */}
                     <div className="col-12 text-center">
-                      {matchYoutubeUrl(item.message) ? (
-                        <Playeryoutube url={item.message} corners={true} />
-                      ) : (
-                        <></>
-                      )}
+                      {
+                        youtubeURL ? <Playeryoutube url={youtubeURL} corners={true} /> : <></>
+                      }
                     </div>
                   </div>
                   <div className="likeShareIconCounter">
                     <ul className="nav nav-custom-like-count">
                       <li className="nav-item">
                         {item.likeCount > 0 ? (
-                          <div
-                            className={"d-flex align-items-center"}
-                            onClick={() => setShowUserLikedPost(item?._id)}
-                          >
+                          <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(item?._id)}>
                             <div className="floating-reactions-container">
-                              {postReactions.includes("like") && (
-                                <span>
-                                  <img
-                                    src="/images/icons/filled-thumbs-up.svg"
-                                    alt="filled-thumbs-up"
-                                  />
-                                </span>
-                              )}
-                              {postReactions.includes("love") && (
-                                <span>
-                                  <img
-                                    src="/images/icons/filled-heart.svg"
-                                    alt="filled-heart"
-                                  />
-                                </span>
-                              )}
-                              {postReactions.includes("insight") && (
-                                <span>
-                                  <img
-                                    src="/images/icons/filled-insightfull.svg"
-                                    alt="filled-insightfull"
-                                  />
-                                </span>
-                              )}
+                              {
+                                postReactions.includes("like") && <span><img src="/images/icons/filled-thumbs-up.svg" alt="filled-thumbs-up" /></span>
+                              }
+                              {
+                                postReactions.includes("love") && <span><img src="/images/icons/filled-heart.svg" alt="filled-heart" /></span>
+                              }
+                              {
+                                postReactions.includes("insight") && <span><img src="/images/icons/filled-insightfull.svg" alt="filled-insightfull" /></span>
+                              }
                             </div>
-                            <span className="mx-2">
-                              {countFormator(item?.likeCount)}
-                            </span>
+                            <span className="mx-2">{countFormator(item?.likeCount)}</span>
                           </div>
                         ) : (
-                          <NavLink className="nav-link">
-                            <img
-                              src="/images/icons/no-reaction.svg"
-                              alt="like"
-                              className="img-fluid"
-                              style={{
-                                width: "24px",
-                                height: "24px",
-                                marginRight: "5px",
-                              }}
-                            />
+                          <NavLink
+                            className="nav-link"
+                          >
+                            <img src="/images/icons/no-reaction.svg" alt="like" className="img-fluid" style={{ width: "24px", height: "24px", marginRight: "5px" }} />
                             <span>{item?.likeCount}</span>
                           </NavLink>
                         )}
@@ -1005,22 +805,14 @@ const Posts = () => {
                   <div className="likeShareIcon likeShareIconCustom">
                     <ul className="nav">
                       <li className="nav-item">
-                        <FBReactions
-                          postReaction={item?.reaction ?? null}
-                          postId={item._id}
-                          updatePostAfterReaction={updatePostAfterReaction}
-                        />
+                        <FBReactions postReaction={item?.reaction ?? null} postId={item._id} updatePostAfterReaction={updatePostAfterReaction} />
                       </li>
                       <li className="nav-item">
                         <NavLink
                           className="nav-link feedComment feedCustom"
                           onClick={() => handleShowComment(item._id)}
                         >
-                          <img
-                            src="/images/icons/comment.svg"
-                            alt="comment"
-                            className="img-fluid"
-                          />{" "}
+                          <img src="/images/icons/comment.svg" alt="comment" className="img-fluid" />{" "}
                           <span>Comment</span>
                         </NavLink>
                       </li>
@@ -1031,12 +823,7 @@ const Posts = () => {
                             className="nav-link feedShare feedCustom"
                             data-bs-toggle="dropdown"
                           >
-                            <img
-                              src="/images/icons/share.svg"
-                              alt="share"
-                              className="img-fluid"
-                            />{" "}
-                            <span>Share</span>
+                            <img src="/images/icons/share.svg" alt="share" className="img-fluid" /> <span>Share</span>
                           </a>
                           <ul className="dropdown-menu">
                             <li>
@@ -1072,9 +859,7 @@ const Posts = () => {
                                 href="javascript:void(0)"
                                 className="dropdown-item"
                                 onClick={() =>
-                                  navigator.clipboard.writeText(
-                                    window.location.origin + "/post/" + item._id
-                                  )
+                                  navigator.clipboard.writeText(window.location.origin + "/post/" + item._id)
                                 }
                               >
                                 <img
@@ -1087,15 +872,10 @@ const Posts = () => {
                             </li>
                             <li>
                               <a
+                                href="javascript:void(0)"
                                 className="dropdown-item dropdown-itemShare-fbCustom"
-                                href={
-                                  facebookurl +
-                                  encodeURI(
-                                    window.location.origin + "/post/" + item._id
-                                  )
-                                }
+                                href={facebookurl + encodeURI(window.location.origin + "/post/" + item._id)}
                                 target="_blank"
-                                rel="noreferrer"
                               >
                                 <img
                                   src="/images/icons/facebook.svg"
@@ -1107,15 +887,10 @@ const Posts = () => {
                             </li>
                             <li>
                               <a
+                                href="javascript:void(0)"
                                 className="dropdown-item"
-                                href={
-                                  twitterurl +
-                                  encodeURI(
-                                    window.location.origin + "/post/" + item._id
-                                  )
-                                }
+                                href={twitterurl + encodeURI(window.location.origin + "/post/" + item._id)}
                                 target="_blank"
-                                rel="noreferrer"
                               >
                                 <img
                                   src="/images/icons/twitter.svg"
@@ -1127,15 +902,10 @@ const Posts = () => {
                             </li>
                             <li>
                               <a
+                                href="javascript:void(0)"
                                 className="dropdown-item"
-                                href={
-                                  mailto +
-                                  encodeURI(
-                                    window.location.origin + "/post/" + item._id
-                                  )
-                                }
+                                href={mailto + encodeURI(window.location.origin + "/post/" + item._id)}
                                 target="_blank"
-                                rel="noreferrer"
                               >
                                 <img
                                   src="/images/icons/email.svg"
@@ -1190,32 +960,17 @@ const Posts = () => {
           }}
         />
       )}
-      {postSuccessPopup && (
-        <PostShareSuccess onClose={handlePostSuccessPopup} />
-      )}
+      {postSuccessPopup && <PostShareSuccess onClose={handlePostSuccessPopup} />}
       {showOtherPostSharedPopup && (
-        <OtherPostSharedSuccess
-          onClose={() => setShowOtherPostSharedPopup(!showOtherPostSharedPopup)}
-        />
+        <OtherPostSharedSuccess onClose={() => setShowOtherPostSharedPopup(!showOtherPostSharedPopup)} />
       )}
       {showOtherPostFailedPopup && (
-        <OtherPostShareFail
-          onClose={() => setShowOtherPostFailedPopup(!showOtherPostFailedPopup)}
-        />
+        <OtherPostShareFail onClose={() => setShowOtherPostFailedPopup(!showOtherPostFailedPopup)} />
       )}
       {postFailPopup && <PostShareFail onClose={handlePostFailPopup} />}
-      {showSharePost && (
-        <SharePostSelect
-          onClose={() => setShowSharePost(!showSharePost)}
-          post={dataForSharePost}
-        />
-      )}
+      {showSharePost && <SharePostSelect onClose={() => setShowSharePost(!showSharePost)} post={dataForSharePost} />}
       {mediaFiles && mediaFiles.length > 0 && (
-        <ImageCarousel
-          onClose={() => setMediaFiles(null)}
-          mediaFiles={mediaFiles}
-          imageIdx={imageIdx}
-        />
+        <ImageCarousel onClose={() => setMediaFiles(null)} mediaFiles={mediaFiles} imageIdx={imageIdx} />
       )}
       {showUnfollowPopup && (
         <Unfollow
@@ -1244,7 +999,7 @@ const Posts = () => {
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default Posts;
+export default Posts

@@ -36,8 +36,7 @@ import GroupChatMobile from "../pages/home/chatType/GroupChatMobile";
 import GroupInvite from "../pages/group/GroupInvite";
 import GroupSuggestion from "../pages/signup/GroupSuggestion";
 import LoginInactive from "../pages/login/LoginInactive";
-import LoadingData from "../pages/login/LoadingData";
-import NewMessage from "../pages/message/NewMessage";
+import LoadingData from "../pages/login/LoadingData"; 
 
 function AllRoutes() {
   const serv = new UserService();
@@ -88,8 +87,7 @@ function AllRoutes() {
         <Route exact path="/setting/:page" element={<Setting />} />
         <Route exact path="/createpost" element={<CreatePostMobile />} />
         <Route exact path="/post/:id" element={<PostDetail />} />
-        <Route exact path="/message" element={<Message />} />
-        <Route exact path="/new/message" element={<NewMessage />} />
+        <Route exact path="/message" element={<Message />} /> 
         <Route exact path="/message/:id" element={<Message />} />
         <Route exact path="/message/show/:chat_id/:message_id" element={<Message />} />
         {/* <Route exact path="/globalmessage" element={<GlobalMessage />} /> */}

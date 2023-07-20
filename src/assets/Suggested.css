@@ -1,6 +1,5 @@
 .suggestionBox {
-  position: sticky;
-  top: 98px;
+  position: relative; 
   /* height: ; */
   background: #fff;
   border-radius: 15px;
@@ -23,8 +22,8 @@
 }
 
 .suggestionBody {
-  height: 160px;
-  max-height: 160px;
+  height: 180px;
+  max-height: 180px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -36,7 +35,7 @@
   display: none;
 }
 
-.profileBox {
+.suggestionBody .profileBox {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -45,6 +44,17 @@
   height: 152px;
   /* margin-top: 10px; */
 }
+
+.suggestionBody .profileBox button { 
+  background: #00808b;
+  border-radius: 50px;
+  outline: 0;
+  border: 0;
+  font-weight: 500;
+  color: #fff;
+  padding:5px 20px;
+}
+
 .suggestionBody .profileBox a {
   display: flex;
   color: black;
@@ -68,6 +78,8 @@
 
 .profileBox span {
   text-align: center;
+  height: 15px;
+  margin-bottom: 0.75rem;
 }
 
 .profileBox .name {
@@ -75,18 +87,15 @@
 }
 
 .profileBox .title {
+  font-weight: 500;
+  color: #465d61;
   font-size: smaller;
 }
 
-.profileBox button {
-  width: 86.15px;
-  height: 30px;
-  background: #00808b;
-  border-radius: 50px;
-  outline: 0;
-  border: 0;
+.profileBox .followers {
   font-weight: 500;
-  color: #fff;
+  color: #465d61;
+  font-size: smaller;
 }
 
 /* MODAL STYLING */
@@ -98,7 +107,7 @@
 
 .button-header {
   justify-content: flex-start;
-  padding: 1rem 0.2rem 0 0.2rem;
+  padding: 1rem 1rem 0 1rem;
 }
 
 .button-header button {
@@ -108,6 +117,7 @@
   outline: none;
   padding: 0.2rem 1rem;
   border: 0;
+  color: #465d61;
 }
 
 .button-header button:nth-child(1),
@@ -115,7 +125,7 @@
   border-right: 2px solid #d1d1d1;
 }
 
-.active-tab {
+.button-header button.active-tab {
   color: #00808b;
 }
 
@@ -130,22 +140,20 @@
 .suggestionModalBody {
   width: 100%;
   height: 72vh;
-  column-gap: 15px;
-  padding: 0 25px 0 25px;
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
   align-content: flex-start;
+  padding: 15px;
 }
 
 .suggestionModalBody .profileBox {
-  width: 270px;
-  height: 165px;
-  margin: 8px 0px;
   border: 1px solid #d1d1d1;
-  border-radius: 20px;
-  align-items: flex-start;
+  border-radius: 15px;
+  width: 100%;
+  padding: 1rem;
 }
+
 .suggestionModalBody .profileBox:hover {
   box-shadow: 0 3px #d1d1d1;
   cursor: pointer;
@@ -153,15 +161,15 @@
 }
 
 .suggestionModalBody .profileBox a {
-  padding-left: 15%;
   display: flex;
   color: black;
-  align-items: center;
+  align-items: start;
+  margin-bottom: 0.75rem;
 }
 
 .suggestionModalBody .profileBox a img {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
 }
 
 .suggestionModalBody .profileBox a .profile-content {
@@ -176,69 +184,32 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   padding: 6px 0;
-  padding-left: 15%;
-  column-gap: 30px;
+  column-gap: 15px;
+}
+
+.suggestionModalBody .profileBox .suggst-btns button {
+  width: 120px;
+  height: 40px;
+  background: #00808b;
+  border-radius: 50px;
+  outline: 0;
+  border: 0;
+  font-weight: 500;
+  color: #fff;
 }
 
 .suggestionModalBody .profileBox .suggst-btns .skip {
   background-color: #fff;
-  border: 2px solid #00808b;
+  border: 1px solid #d1d1d1;
   color: #000;
   transition: all 0.2s ease;
 }
 
 .suggestionModalBody .profileBox .suggst-btns .skip:hover {
-  background-color: #00808b;
+  background-color: #000000;
   color: #fff;
-}
-
-@media only screen and (min-width: 992px) {
-  .suggestionBox .profileBox {
-    width: 100px;
-    height: 120px;
-    padding-bottom: 20px;
-  }
-
-  .profileBox .suggestClose {
-    top: 20px;
-    left: 55px;
-  }
-
-  .suggestionModalBody {
-    height: 70vh;
-    column-gap: 10px;
-    padding: 0;
-  }
-
-  .suggestionModalBody .profileBox {
-    width: 240px;
-    height: 120px;
-  }
-
-  .suggestionModalBody .profileBox a img {
-    width: 60px;
-    height: 60px;
-  }
-}
-
-@media only screen and (min-width: 1200px) {
-  .suggestionModalBody {
-    height: 68vh;
-    column-gap: 15px;
-    padding: 0;
-  }
-
-  .suggestionModalBody .profileBox {
-    width: 290px;
-    height: 155px;
-  }
-
-  .suggestionModalBody .profileBox a img {
-    width: 70px;
-    height: 70px;
-  }
 }
 
 /* SEARCH BAR */
@@ -263,4 +234,59 @@
   padding-left: 40px;
   font-weight: 400;
   line-height: 20px;
+}
+
+@media only screen and (min-width: 992px) {
+  .suggestionBox .profileBox {
+    width: 100px;
+    height: 120px;
+    padding-bottom: 20px;
+  }
+
+  .profileBox .suggestClose {
+    top: 20px;
+    left: 55px;
+  }
+
+  .suggestionModalBody {
+    height: 70vh;
+    column-gap: 10px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .suggestionModalBody {
+    height: 68vh;
+    column-gap: 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .button-header {
+    white-space: nowrap;
+    overflow-x: scroll;
+    padding-bottom: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-dialog {
+    max-width: 600px;
+    margin: 1.75rem auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-header {
+    flex-direction: column;
+  }
+  .suggestInputGroup {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0;
+  }
+}
+
+.hscroll::-webkit-scrollbar {
+  height: 5px;
 }

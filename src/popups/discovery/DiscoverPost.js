@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import PostService from "../../services/postService";
 import DiscoverService from "../../services/discoverService";
+import HelperFunctions from "../../services/helperFunctions";
 import VideoImageThumbnail from "react-video-thumbnail-image";
 import ReactPlayer from "react-player";
 import moment from "moment";
@@ -21,12 +22,15 @@ import OtherPostSharedSuccess from "../post/OtherPostSharedSuccess";
 import OtherPostShareFail from "../post/OtherPostSharedFail";
 import FBReactions from "../../components/FBReactions";
 import ProfilePreview from "../../components/ProfilePreview";
+import Playeryoutube from "../../components/Playeryoutube";
+import OriginalPostCreator from "../../components/OriginalPostCreator";
 
 const isImage = ["gif", "jpg", "jpeg", "png", "svg", "HEIC", "heic", "webp", "jfif", "pjpeg", "pjp", "avif", "apng"];
 export default function DiscoverPost({ onClose, postId, slideLeft, slideRight, changePostIdx }) {
   const postServ = new PostService();
   const discoverServ = new DiscoverService();
   const followerServ = new UserFollowerService();
+  const helperServ = new HelperFunctions();
   const globalCtx = useContext(GlobalContext);
   const [user, setUser] = globalCtx.user;
   const [showCommentPostList, setShowCommentPostList] = globalCtx.showCommentPostList;
@@ -46,6 +50,7 @@ export default function DiscoverPost({ onClose, postId, slideLeft, slideRight, c
   const [showOtherPostSharedPopup, setShowOtherPostSharedPopup] = useState(false);
   const [showOtherPostFailedPopup, setShowOtherPostFailedPopup] = useState(false);
   const [imageIdx, setImageIdx] = useState(0);
+  const [youtubeURL, setYouttubeURL] = useState(null);
 
   let twitterurl = "http://twitter.com/share?text=vestorgrow home page&url=";
   let facebookurl = "https://www.facebook.com/sharer/sharer.php?t=vestorgrow home page&u=";
@@ -75,6 +80,7 @@ export default function DiscoverPost({ onClose, postId, slideLeft, slideRight, c
       if (resp.data) {
         setPost(resp.data);
         getFollowStatus(resp.data.createdBy._id);
+        setYouttubeURL(helperServ.extractYouTubeURL(resp.data.message));
         // handleShowComment(resp.data._id);
       }
     } catch (err) {
@@ -288,9 +294,11 @@ export default function DiscoverPost({ onClose, postId, slideLeft, slideRight, c
                         </OwlCarousel>
                       </div>
                     )}
-                    <div className="discoverFeed discoverFeedText discoverFeed-custom mt-4">
+                    <div className="discoverFeed discoverFeedText discoverFeed-custom mt-4" style={{ paddingLeft: post?.mediaFiles.length > 0 ? "15px" : "40px" }}>
+
                       <div className="feedBoxInner discoverModelProfInner discoverModelProfInnerCustom">
                         <div>
+                          <OriginalPostCreator originalPostData={post?.originalPostId} createdByUser={post?.createdBy} createdAt={post?.createdAt} />
                           <div className="feedBoxHead d-flex feedBoxHead-customMobile">
                             <div className="discoverModelProf">
                               <div className="feedBoxprofImg" onClick={onClose}>
@@ -397,6 +405,11 @@ export default function DiscoverPost({ onClose, postId, slideLeft, slideRight, c
                                 </div>
                               </Linkify>
                             )}
+                          </div>
+                          <div>
+                            {
+                              youtubeURL && <Playeryoutube url={youtubeURL} corners={true} />
+                            }
                           </div>
                           <div className="likeShareIconCounter">
                             <ul className="nav nav-custom-like-count">

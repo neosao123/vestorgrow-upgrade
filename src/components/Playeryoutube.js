@@ -13,21 +13,19 @@ const Playeryoutube = ({ url, height, corners }) => {
     };
 
     const _onReady = (event) => {
-        // access to player in all event handlers via event.target
         event.target.pauseVideo();
     }
-    const [videoId, setVideoId] = useState();
-    useEffect(() => {
-        if (url) {
-            try {
-                var video_id = url.split("v=")[1].split("&")[0];
-                setVideoId(video_id)
-            } catch (err) {
-                setVideoId("")
-            }
-        }
-    }, [url])
+    
+    let videoId = "";
 
+    if (url) {
+        try {
+            var video_id = url.split("v=")[1].split("&")[0];
+            videoId = (video_id);
+        } catch (err) {
+            //do nothing
+        }
+    }
 
     return (
         <YouTube videoId={videoId} opts={opts} onReady={_onReady} />

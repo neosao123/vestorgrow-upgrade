@@ -84,7 +84,7 @@ export default function GroupChat({
   }, []);
   useEffect(() => {
     for (const item in unreadCount) {
-      if (getMessageData.filter((i) => i.id == item).length > 0) {
+      if (getMessageData.filter((i) => i.id === item).length > 0) {
         setUnreadCount({ ...unreadCount, [item]: 0 });
       }
     }
@@ -942,7 +942,7 @@ export default function GroupChat({
                         className="btn-close"
                         onClick={() => setMessage({ ...message, file: "" })}
                       />
-                      <img src={URL.createObjectURL(message.file)} className="img-fluid imagePreData" alt=""/>
+                      <img src={URL.createObjectURL(message.file)} className="img-fluid imagePreData" alt="" />
                     </div>
                   )}
                   <div className="messageReplyOption position-relative">

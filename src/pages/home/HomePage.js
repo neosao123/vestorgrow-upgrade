@@ -10,9 +10,11 @@ function HomePage() {
       <div className="socialContantInner">
         <Profile />
         <Posts />
-        <div className="rightColumn">
-          <Suggested />
-          <ChatsType />
+        <div className="rightColumn" >
+          <div style={{ position: "sticky", top: "98px" }}>
+            <Suggested />
+            <ChatsType />
+          </div>
         </div>
       </div>
     </div>

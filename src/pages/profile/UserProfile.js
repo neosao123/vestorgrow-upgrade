@@ -5,6 +5,7 @@ import PostService from "../../services/postService";
 import DetailAbout from "../../popups/about/DetailAbout";
 import UserService from "../../services/UserService";
 import UserFollower from "../../services/userFollowerService";
+import HelperFunctions from "../../services/helperFunctions";
 import moment from "moment";
 import VideoImageThumbnail from "react-video-thumbnail-image";
 import Unfollow from "../../popups/unfollow/Unfollow";
@@ -17,6 +18,7 @@ import EnlargeImage from "../../popups/userprofile/EnlargeImage";
 import UserLikedPost from "../../popups/post/UserLikedPost";
 import "./userprofile.css";
 import MyGroupList from "./MyGroupList";
+import AllSuggestions from "./AllSuggestions";
 
 
 const isImage = ["gif", "jpg", "jpeg", "png", "svg", "HEIC", "heic", "webp", "jfif", "pjpeg", "pjp", "avif", "apng"];
@@ -27,6 +29,7 @@ const UserProfile = () => {
     const postServ = new PostService();
     const userServ = new UserService();
     const followerServ = new UserFollower();
+    const helperServ = new HelperFunctions();
     const [user, setUser] = useState();
     const [postList, setPostList] = useState([]);
     const [firstRowList, setFirstRowList] = useState([]);
@@ -48,7 +51,8 @@ const UserProfile = () => {
     const [privateAccount, setPrivateAccount] = useState(0);
     const [sessionUserId, setSessionUserId] = useState("");
     const [activeTab, setActiveTab] = useState("about");
-
+    const [suggestedUsers, setSuggestedUsers] = useState([]);
+    const [showSuggestedProfiles, setShowSuggestedProfiles] = useState(false);
     const getUser = async (id) => {
         let currUser = JSON.parse(localStorage.getItem("user"));
         setSessionUserId(currUser._id);
@@ -204,6 +208,9 @@ const UserProfile = () => {
         }, 200);
     }
 
+    const closeSuggestionModal = () => {
+        setShowSuggestedProfiles(!showSuggestedProfiles);
+    }
     useEffect(() => {
         getUser(params.id);
         getPostList(params.id);
@@ -309,7 +316,7 @@ const UserProfile = () => {
                 <div className="tab-content mt-2">
                     <div className={activeTab === "about" ? "tab-pane active" : "tab-pane"} id="about">
                         <div className="row g-2">
-                            <div className="col-sm-12">
+                            <div className="col-sm-12 col-md-7 col-lg-8">
                                 <div className="card border-0">
                                     <div className="card-body">
                                         <h6 className="card-section-title">About</h6>
@@ -340,6 +347,43 @@ const UserProfile = () => {
                                     </div>
                                 </div>
                             </div>
+                            <div className="col-sm-12 col-md-5 col-lg-4">
+                                <div className="card border-0">
+                                    <div className="card-body">
+                                        <div className="suggested-header">
+                                            <h6 className="card-title">Suggested for you</h6>
+                                            <div className="see-all-link" onClick={() => setShowSuggestedProfiles(!showSuggestedProfiles)}>See All</div>
+                                        </div>
+                                        <div>
+                                            {
+                                                suggestedUsers && suggestedUsers.map((suggestedUser, index) => {
+                                                    if (index < 4) {
+                                                        return (
+                                                            <div key={"abt-sgu-" + index} className="mb-2 border-bottom border-1 py-3">
+                                                                <div className="d-flex align-align-items-start">
+                                                                    <ProfileImage url={suggestedUser.profile_img} style={{ borderRadius: "50%", width: "48px", height: "48px" }} />
+                                                                    <div className="ms-3">
+                                                                        <div style={{ fontWeight: "600" }}>{suggestedUser?.user_name.length > 27 ? suggestedUser?.user_name.slice(0, 27) + "..." : user?.user_name}</div>
+                                                                        <div>{suggestedUser?.first_name} {suggestedUser?.last_name}</div>
+                                                                        <div>{suggestedUser?.title}</div>
+                                                                        <div>
+                                                                            <button
+                                                                                className={`btn btnColor btnFollow`}
+                                                                            >
+                                                                                Follow
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className={activeTab === "posts" ? "tab-pane active" : "tab-pane"} id="posts">
@@ -348,6 +392,7 @@ const UserProfile = () => {
                                 postList &&
                                 postList.map((item, idx) => {
                                     const postReactions = item.postReactions ?? [];
+                                    const youtubeUrl = helperServ.extractYouTubeURL(item.message);
                                     return (
                                         <div className="col-sm-4 col-lg-4 dynamic-width-custom">
                                             <div className="bgWhiteCard feedBox post_box">
@@ -423,10 +468,11 @@ const UserProfile = () => {
                                                     ) : (
                                                         <div className="postImg mx_minus postImg-custom-profile">
                                                             {
-                                                                (matchYoutubeUrl(item.message)) ? (
+                                                                youtubeUrl ? (
                                                                     <div style={{ width: "100%" }}>
-                                                                        <Playeryoutube url={item.message} height={"260px"} corners={false} />
-                                                                    </div>) : (
+                                                                        <Playeryoutube url={youtubeUrl} height={"260px"} corners={false} />
+                                                                    </div>
+                                                                ) : (
                                                                     <div className="profile-post-image-text" style={{ padding: '25px' }}>
                                                                         <div className="mb-0 profile-post-image-inner-text" dangerouslySetInnerHTML={{ __html: item.message.length > 320 ? item.message.slice(0, 320) + "..." : item.message }} />
                                                                     </div>
@@ -442,7 +488,7 @@ const UserProfile = () => {
                                                             <li className="nav-item">
                                                                 {
                                                                     postReactions.length > 0 ? (
-                                                                        <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(item?._id)}>
+                                                                        <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(item._id)}>
                                                                             <div className="floating-reactions-container">
                                                                                 {
                                                                                     postReactions.includes("like") && <span><img src="/images/icons/filled-thumbs-up.svg" alt="filled-thumbs-up" /></span>
@@ -459,6 +505,7 @@ const UserProfile = () => {
                                                                     ) : (
                                                                         <Link
                                                                             className="nav-link feedUnlike feedCustom"
+                                                                            onClick={() => setShowUserLikedPost(item._id)}
                                                                         >
                                                                             <img src="/images/icons/like.svg" alt="like" className="img-fluid" />
                                                                             <span className="mx-2">{item?.likeCount}</span>
@@ -467,7 +514,7 @@ const UserProfile = () => {
                                                                 }
                                                             </li>
                                                             <li className="nav-item">
-                                                                <Link className="nav-link" href="#">
+                                                                <Link className="nav-link" onClick={() => handlePostPopup(item._id, idx)}>
                                                                     <img src="/images/icons/comment.svg" alt="comment" className="img-fluid" />{" "}
                                                                     <span>{item?.commentCount}</span>
                                                                 </Link>
@@ -490,7 +537,7 @@ const UserProfile = () => {
                     </div>
                     <div className={activeTab === "groups" ? "tab-pane active" : "tab-pane"} id="groups">
                         <div className="row g-2">
-                            <div className="col-sm-12">
+                            <div className="col-sm-12 col-md-7 col-lg-8">
                                 <div className="card border-0">
                                     <div className="card-body">
                                         <h6 className="card-section-title">Groups</h6>
@@ -498,6 +545,43 @@ const UserProfile = () => {
                                             <MyGroupList
                                                 userData={user}
                                             />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-12 col-md-5 col-lg-4">
+                                <div className="card border-0">
+                                    <div className="card-body">
+                                        <div className="suggested-header">
+                                            <h6 className="card-title">Suggested for you</h6>
+                                            <div className="see-all-link" onClick={() => setShowSuggestedProfiles(!showSuggestedProfiles)}>See All</div>
+                                        </div>
+                                        <div>
+                                            {
+                                                suggestedUsers && suggestedUsers.map((suggestedUser, index) => {
+                                                    if (index < 4) {
+                                                        return (
+                                                            <div key={"abt-sgu-" + index} className="mb-2 border-bottom border-1 py-3">
+                                                                <div className="d-flex align-align-items-start">
+                                                                    <ProfileImage url={suggestedUser.profile_img} style={{ borderRadius: "50%", width: "48px", height: "48px" }} />
+                                                                    <div className="ms-3">
+                                                                        <div style={{ fontWeight: "600" }}>{suggestedUser?.user_name.length > 27 ? suggestedUser?.user_name.slice(0, 27) + "..." : user?.user_name}</div>
+                                                                        <div>{suggestedUser?.first_name} {suggestedUser?.last_name}</div>
+                                                                        <div>{suggestedUser?.title}</div>
+                                                                        <div>
+                                                                            <button
+                                                                                className={`btn btnColor btnFollow`}
+                                                                            >
+                                                                                Follow
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+                                                })
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -567,13 +651,19 @@ const UserProfile = () => {
                     />
                 )
             }
+
             {
                 showEnlarge && (
                     <EnlargeImage imgUrl={user?.profile_img} onClose={handleShowEnlarge} />
                 )
             }
 
-        </div>
+            {
+                showSuggestedProfiles && (
+                    <AllSuggestions showModal={true} closeSuggestionModal={closeSuggestionModal} />
+                )
+            }
+        </div >
     )
 }
 

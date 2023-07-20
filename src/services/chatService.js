@@ -228,6 +228,25 @@ export default class ChatService {
       }
     );
   }
+  async composeNewMsg(payload) {
+    const token = localStorage.getItem("token") ? localStorage.getItem("token") : "no-token";
+    const config = {
+      headers: {
+        content: "multipart/form-data",
+        Authorization: "Bearer " + token,
+      },
+    };
+    try {
+      const response = await axios.post(process.env.REACT_APP_API_BASEURL + "/message/compose/new", payload, config);
+      if (response.err) {
+        throw new Error(response.err);
+      } else {
+        return response.data;
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
   joinGroup(payload) {
     return util
       .sendApiRequest("/chat/joingroup", "POST", true, payload)

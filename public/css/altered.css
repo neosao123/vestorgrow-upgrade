@@ -287,7 +287,6 @@
 .feedChatHeadCustom {
   background: #fff;
   border-bottom: 0.5px solid #d1d1d1;
-  margin-top: 15px;
 }
 
 .groupIconCustom a.active {
@@ -1153,16 +1152,20 @@
 }
 
 .allFeedUserCustom {
-  height: calc(100vh - 280px);
+  /*height: calc(100vh - 280px);*/
+  max-height: 280px;
+  height: 280px;
+  overflow-y: auto;
 }
 
 .stickyChatBox .allFeedUserCustom {
   height: calc(100vh - 210px);
 }
+
 .chatBoxParent {
   position: absolute;
   bottom: 0px;
-  right: 565px;
+  right: 350px;
   display: flex;
   gap: 10px;
   /* width: 340px; */
@@ -2315,7 +2318,7 @@
 
 .compose_Searchbar-custom {
   margin: 0;
-  border-top: 1px solid #d1d1d1;
+  /* border-top: 1px solid #d1d1d1; */
   border-bottom: none;
 }
 
@@ -2328,13 +2331,15 @@
   margin-left: 12px;
 }
 .compose_Searchbar-custom .Search__control {
-  width: calc(100% - 48px);
+  /* width: calc(100% - 48px); */
   /* height: 36px; */
   background: #e7e7e7;
   border: 1px solid #d1d1d1;
   border-radius: 20px;
   margin: 0 auto;
-  margin-top: 5px;
+  margin-top: 2px;
+  box-shadow: none;
+  border: none;
 }
 
 .chatBoxHead_Custom {
@@ -3475,7 +3480,9 @@ body.modal-custom-bg-scrollStop {
   }
 
   .discoverPostModelBodyCustom {
-    padding: 0px 35px 0px 0px;
+    /*padding: 0px 35px 0px 0px;*/
+    padding: 0px;
+    /* margin: 0 15px; */
     display: grid;
     grid-template-columns: 630px 1fr;
     /* gap: 40px; */
@@ -3483,7 +3490,7 @@ body.modal-custom-bg-scrollStop {
   }
 
   .discoverFeedText {
-    padding-left: 40px;
+    /* padding-left: 40px; */
   }
 
   .discoverModelProfInnerCustom {
@@ -3520,7 +3527,7 @@ body.modal-custom-bg-scrollStop {
   }
 
   .commentWrapper {
-    overflow: hidden;
+    overflow-y: hidden;
     max-height: 100%;
     padding-right: 1px;
     padding-bottom: 10px;
@@ -5234,6 +5241,11 @@ div.form-input {
   width: 20px;
   height: 20px;
 }
+
+.likeShareIconCounter .nav {
+  align-items: center;
+}
+
 .groupSuggestionText {
   width: 180px;
 }
@@ -5268,4 +5280,12 @@ div.form-input {
 .floating-reactions-container span img {
   width: 24px;
   height: 24px;
+}
+.Search__control:hover {
+  border: none;
+  outline: none;
+}
+.css-t3ipsp-control {
+  border-width: 0;
+  box-shadow: none;
 }

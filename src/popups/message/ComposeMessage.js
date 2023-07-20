@@ -154,6 +154,13 @@ export default function ComposeMessage({ onClose, onFinish, deskView }) {
     }
   };
 
+  const customFilterOption = (option, searchText) => {
+    if (option.label.toLowerCase().startsWith(searchText.toLowerCase())) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <>
       {!deskView && (
@@ -204,6 +211,15 @@ export default function ComposeMessage({ onClose, onFinish, deskView }) {
                               ...i.userId,
                             };
                           })}
+                          styles={{
+                            control: (baseStyles, state) => ({
+                              background: "#E7E7E7",
+                              borderRadius: "0 35px 35px 0",
+                              border:"none",
+                              boxShadow:"none"
+                            }),
+                          }}
+                          filterOption={customFilterOption}
                           //onChange={(e) => setCompUserList(e)}
                           onChange={(e) => setCompUserList([...compUserList, ...e])}
                           className="w-100 basic-multi-select"
@@ -215,39 +231,20 @@ export default function ComposeMessage({ onClose, onFinish, deskView }) {
                           }}
                         />
                       </div>
-                      {/* <div className="compose_Searchbar">
-                        <img src="/images/icons/search.svg" alt="search" className="img-fluid search_Icon" />
-                        <input
-                          type="text"
-                          onChange={(e) => setSearchText(e.target.value)}
-                          value={searchText}
-                          className="form-control"
-                          placeholder="Search"
-                          name="search"
-                        />
-                        <div className="search_result_d">
-                          {compUserList.map((item) => {
-                            return <span className="badge search_value">@{item.user_name}</span>;
-                          })}
-                        </div>
-                        {compUserList.length > 0 && (
-                          <img
-                            src="/images/profile/cross-icon.svg"
-                            className="search_cross"
-                            onClick={() => handleCompUserList()}
-                          />
-                        )}
-                      </div> */}
                       {searchText && (
                         <div className="searchListFlow">
                           <div className="search_dataList search_dataList-custom">
                             <div className="overflow_searchList followListsInner">
                               {userList.filter((i) => {
-                                return i.userId?.user_name?.toLowerCase().includes(searchText.toLowerCase());
+                                console.log(i.userId);
+                                //return i.userId?.user_name?.toLowerCase().includes(searchText.toLowerCase());
+                                return i.userId?.user_name?.toLowerCase().startsWith(searchText);
                               }).length > 0 ? (
                                 userList
                                   .filter((i) => {
-                                    return i.userId?.user_name?.toLowerCase().includes(searchText.toLowerCase());
+                                    console.log(i.userId);
+                                    //return i.userId?.user_name?.toLowerCase().includes(searchText.toLowerCase());
+                                    return i.userId?.user_name?.toLowerCase().startsWith(searchText);
                                   })
                                   .map((item) => {
                                     return (
@@ -392,14 +389,15 @@ export default function ComposeMessage({ onClose, onFinish, deskView }) {
                       console.log(i.userId);
                       return (
                         // i.userId?.first_name.toLowerCase().includes(searchText.toLowerCase()) ||
-                        i.userId?.user_name?.toLowerCase().includes(searchText.toLowerCase())
+                        i.userId?.user_name?.toLowerCase().startsWith(searchText.toLowerCase())
                       );
                     }).length > 0 ? (
                       userList
                         .filter((i) => {
+                          console.log(i.userId);
                           return (
                             // i.userId?.userId.toLowerCase().includes(searchText.toLowerCase()) ||
-                            i.userId?.user_name?.toLowerCase().includes(searchText.toLowerCase())
+                            i.userId?.user_name?.toLowerCase().startsWith(searchText.toLowerCase())
                           );
                         })
                         .map((item) => {
@@ -431,7 +429,7 @@ export default function ComposeMessage({ onClose, onFinish, deskView }) {
             )}
           </div>
           <div
-            className={`messagess msgSection allFeedUser overflowScrollStop ${expend == 1 ? "msgSectionLarge-message" : "msgSectionLarge-message-sm"
+            className={`messagess msgSection allFeedUser overflowScrollStop ${expend === 1 ? "msgSectionLarge-message" : "msgSectionLarge-message-sm"
               }`}
             id={`messagess`}
           ></div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import PostService from "../../services/postService";
 import DiscoverService from "../../services/discoverService";
+import HelperFunctions from "../../services/helperFunctions";
 import VideoImageThumbnail from "react-video-thumbnail-image";
 import OwlCarousel from "react-owl-carousel";
 import ReactPlayer from "react-player";
@@ -19,6 +20,8 @@ import Linkify from "react-linkify";
 import { SecureLink } from "react-secure-link";
 import Unfollow from "../../popups/unfollow/Unfollow";
 import FBReactions from "../../components/FBReactions";
+import Playeryoutube from "../../components/Playeryoutube";
+import OriginalPostCreator from "../../components/OriginalPostCreator";
 
 const isImage = ["gif", "jpg", "jpeg", "png", "svg", "HEIC", "heic", "webp", "jfif", "pjpeg", "pjp", "avif", "apng"];
 export default function PostDetail() {
@@ -26,6 +29,7 @@ export default function PostDetail() {
   const postServ = new PostService();
   const discoverServ = new DiscoverService();
   const followerServ = new UserFollowerService();
+  const helperServ = new HelperFunctions();
   const globalCtx = useContext(GlobalContext);
   const [user, setUser] = globalCtx.user;
   const [isAuthentiCated, setIsAuthentiCated] = globalCtx.auth;
@@ -46,6 +50,7 @@ export default function PostDetail() {
   const [showUnfollowPopup, setShowUnfollowPopup] = useState(false);
   const [unfollowUserData, setUnfollowUserData] = useState(null);
   const [imageIdx, setImageIdx] = useState(0);
+  const [youtubeURL, setYouttubeURL] = useState(null);
 
   let twitterurl = "http://twitter.com/share?text=vestorgrow home page&url=";
   let facebookurl = "https://www.facebook.com/sharer/sharer.php?t=vestorgrow home page&u=";
@@ -72,6 +77,7 @@ export default function PostDetail() {
         getFollowStatus(resp.data.createdBy._id);
         setMetaData(true);
         setPostReactions(resp.data.postReactions ?? []);
+        setYouttubeURL(helperServ.extractYouTubeURL(resp.data.message));
       }
     } catch (err) {
       console.log(err);
@@ -268,6 +274,7 @@ export default function PostDetail() {
                 )}
                 <div className="discoverFeed discoverFeedText discoverFeed-custom mt-4">
                   <div className="feedBoxInner discoverModelProfInner discoverModelProfInnerCustom postDetailProfInnerCustom">
+                    <OriginalPostCreator originalPostData={post?.originalPostId} createdByUser={post?.createdBy} createdAt={post?.createdAt} />
                     <div className="feedBoxHead d-flex">
                       <div className="discoverModelProf">
                         <div className="feedBoxprofImg">
@@ -372,6 +379,11 @@ export default function PostDetail() {
                           <div className="mb-0" dangerouslySetInnerHTML={{ __html: post?.message }} />
                         </Linkify>
                       )}
+                    </div>
+                    <div>
+                      {
+                        youtubeURL && <Playeryoutube url={youtubeURL} corners={true} />
+                      }
                     </div>
                     <div className="likeShareIconCounter">
                       <ul className="nav nav-custom-like-count">

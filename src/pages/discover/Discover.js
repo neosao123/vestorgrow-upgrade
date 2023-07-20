@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import DiscoverService from "../../services/discoverService";
+import HelperFunctions from "../../services/helperFunctions";
 import GlobalContext from "../../context/GlobalContext";
 import ProfileImage from "../../shared/ProfileImage";
 import DiscoverPost from "../../popups/discovery/DiscoverPost";
@@ -14,6 +15,7 @@ const isImage = ["gif", "jpg", "jpeg", "png", "svg", "HEIC", "heic", "webp", "jf
 const isVideo = ["mp4"];
 export default function Discover() {
     const discoverServ = new DiscoverService();
+    const helperServ = new HelperFunctions();
     const globalCtx = useContext(GlobalContext);
     const [searchText, setSearchText] = globalCtx.searchText;
     const [items, setItems] = useState([{ _id: "1", keyword: "all" }]);
@@ -171,7 +173,7 @@ export default function Discover() {
                                 const fullName = item.createdBy.first_name + " " + item.createdBy.last_name;
                                 const user_name = item.createdBy.user_name ?? fullName;
                                 const postReactions = item.postReactions ?? [];
-
+                                const youtubeUrl = helperServ.extractYouTubeURL(item.message);
                                 const clientAvatar = item.createdBy?.profile_img !== "" ? item.createdBy?.profile_img : "/images/profile/default-profile.png";
                                 return (
                                     <div
@@ -188,7 +190,9 @@ export default function Discover() {
                                                             className="grid-image"
                                                             style={{
                                                                 backgroundImage: `url(${item.mediaFiles[0]})`,
-                                                                backgroundSize: "contain"
+                                                                backgroundSize: "cover",
+                                                                backgroundPosition: "center",
+                                                                backgroundRepeat: "no-repeat"
                                                             }}
                                                         ></div>
                                                     ) : (
@@ -209,24 +213,27 @@ export default function Discover() {
                                                 </>
                                             ) : (
                                                 <>
-                                                    {matchYoutubeUrl(item.message) ? (
-                                                        <div className="grid-youtube">
-                                                            <Playeryoutube url={item.message} height={"311px"} corners={true} />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="grid-text">
-                                                            <div className="text-content">
-                                                                <div
-                                                                    dangerouslySetInnerHTML={{
-                                                                        __html:
-                                                                            item.message.length > 320
-                                                                                ? item.message.slice(0, 320) + "..."
-                                                                                : item.message,
-                                                                    }}
-                                                                />
+                                                    {
+                                                        youtubeUrl ? (
+                                                            <div className="grid-youtube">
+                                                                <Playeryoutube url={youtubeUrl} height={"311px"} corners={false} />
                                                             </div>
-                                                        </div>
-                                                    )}
+                                                        ) : (
+                                                            <div className="grid-text">
+                                                                <div className="text-content">
+                                                                    <div
+                                                                        dangerouslySetInnerHTML={{
+                                                                            __html:
+                                                                                item.message.length > 320
+                                                                                    ? item.message.slice(0, 320) + "..."
+                                                                                    : item.message,
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
+
                                                 </>
                                             )}
                                             <div className="grid-details">

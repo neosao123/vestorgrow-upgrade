@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
     control: {
-        zIndex: 1,
+        zIndex: 0,
         backgroundColor: "#fff",
         fontSize: "14px",
         left: "2%",
@@ -12,7 +12,7 @@ export default {
         outline: "none"
     },
     "&multiLine": {
-        zIndex: 1,
+        zIndex: 0,
         control: {
             borderRadius: "5px",
             color: "white",

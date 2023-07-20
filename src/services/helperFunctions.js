@@ -26,5 +26,9 @@ export default class HelperFunctions {
         }
         return userPostMessage;
     }
-
+    extractYouTubeURL(text) {
+        const youtubeURLRegex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/\S+/gi;
+        const matches = text.match(youtubeURLRegex);
+        return matches ? matches[0] : null;
+    }
 };

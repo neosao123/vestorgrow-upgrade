@@ -5,7 +5,7 @@
 
 .messageChatLeftCustom {
   width: 440px !important;
-  border-left: 1px solid #d1d1d1;
+  border-right: 1px solid #d1d1d1;
 }
 
 .messageChatRightCustom {
@@ -36,6 +36,9 @@
 
 .messageRightHeader .messageHeading {
   padding: 1.25rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 
 .messageHeading h4 {
@@ -49,8 +52,8 @@
 }
 
 .allMsgUser {
-  overflow: auto;
-  height: calc(100% - 110px);
+  overflow-y: auto;
+  height: calc(100% - 60px);
 }
 
 .compose_Searchbar {
@@ -77,10 +80,14 @@
   border: none;
   background-color: #ffffff;
   border-radius: 50%;
-  padding:0;
+  padding: 0;
 }
 
 .messageChatLeftHeadIcon img {
   width: 24px;
   height: 24px;
+}
+
+.allMsgUserInner {
+  border-bottom: 1px solid #e3e2e2;
 }

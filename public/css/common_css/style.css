@@ -171,7 +171,6 @@ a {
 }
 
 .socialMediaTheme {
-  width: 100vw;
   background: #eee;
   min-height: 100vh;
   max-height: 100%;
@@ -404,19 +403,11 @@ a {
   content: none;
 }
 
-.owl-stage
-  .owl-item.active.firstActiveItem
-  .item
-  .graphSliderItem
-  .graphSliderInner {
+.owl-stage .owl-item.active.firstActiveItem .item .graphSliderItem .graphSliderInner {
   padding-left: 0;
 }
 
-.owl-stage
-  .owl-item.active.lastActiveItem
-  .item
-  .graphSliderItem
-  .graphSliderInner {
+.owl-stage .owl-item.active.lastActiveItem .item .graphSliderItem .graphSliderInner {
   padding-right: 0;
 }
 
@@ -775,7 +766,7 @@ hr.horiz {
 
 .likeShareIconCounter {
   border-bottom: 0.5px solid #d1d1d1;
-  padding-bottom: 15px;
+  padding: 5px 15px;
 }
 
 .likeShareIcon ul {
@@ -940,7 +931,7 @@ hr.horiz {
 .feedChatBox {
   background: #ffffff;
   box-shadow: 0px 3px 4px rgb(0 0 0 / 5%);
-  border-radius: 15px 15px 0px 0px;
+  border-radius: 15px;
   width: 100%;
   bottom: 0;
   right: 32px;
@@ -1080,6 +1071,7 @@ hr.horiz {
 .feedChatUserMsgGroup {
   display: flex;
   flex-direction: column;
+  padding: 0 5px;
 }
 
 .allFeedUser {
@@ -2994,9 +2986,10 @@ s .multiplePostRight .multiplePostimg {
   box-shadow: 0px 3px 4px rgb(0 0 0 / 5%);
 }
 
+.messageChatBox,
 .messageChatBox .messageChatLeft,
-.messageChatBox {
-  height: calc(100vh - 120px);
+.messageChatBox .messageChatRight {
+  height: calc(100vh - 100px);
 }
 
 .messageHeading {
@@ -3041,7 +3034,6 @@ s .multiplePostRight .multiplePostimg {
 
 .messageChatBox .messageChatRight {
   width: 50%;
-  height: calc(100vh - 120px);
   background-color: #fff;
   box-shadow: 0px 3px 4px rgb(0 0 0 / 5%);
 }
@@ -3195,8 +3187,8 @@ s .multiplePostRight .multiplePostimg {
 .chatWeeks h6::after {
   flex: 1;
   content: "";
-  padding: 0.05rem;
-  background-color: rgb(173, 173, 173);
+  padding: 0.02rem;
+  background-color: #d1d1d1;
   margin: 10px;
 }
 
@@ -4046,13 +4038,7 @@ div#image-cropper-result img {
 }
 
 .chrome input {
-  background: linear-gradient(
-    to right,
-    #00808b 0%,
-    #00808b 50%,
-    #d1d1d1 50%,
-    #d1d1d1 100%
-  );
+  background: linear-gradient(to right, #00808b 0%, #00808b 50%, #d1d1d1 50%, #d1d1d1 100%);
   border: solid 1px #00808b;
   border-radius: 8px;
   height: 7px;
@@ -4286,8 +4272,7 @@ div#image-cropper-result img {
   -webkit-appearance: none;
   background-color: transparent;
   border: 2px solid #00808b;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
-    inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
   padding: 9px;
   display: inline-block;
   position: relative;
@@ -5071,8 +5056,7 @@ div#image-cropper-result img {
 }
 
 .editComm_btn:hover img {
-  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg)
-    saturate(600%) contrast(0.8);
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8);
 }
 
 .userprof_btns .editComm_btn:hover,

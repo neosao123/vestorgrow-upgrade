@@ -59,4 +59,5 @@
 .suggested-header .see-all-link {
   color: #00808b;
   font-weight: 600;
+  cursor: pointer;
 }

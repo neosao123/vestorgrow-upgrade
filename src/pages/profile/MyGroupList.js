@@ -65,29 +65,31 @@ const MyGroupList = ({ ...props }) => {
   }, []);
 
   return (
-    <div className='group-list'>
+    <div className='row group-list'>
       {
         chatList.map((item, idx) => {
           let inUserList = item.users.map((i) => i._id);
           return (
-            <div className="group" key={"oth" + idx}>
-              <div className='group-logo'>
-                <img src={item.chatLogo} alt="" />
-              </div>
-              <div>
-                <h5 className="group-title">{item.chatName}</h5>
-              </div>
-              <div>
-                {
-                  item.createdBy === userData._id ? (
-                    <button className='group-btn member-btn'>Admin</button>
-                  ) :
-                    inUserList.includes(userData._id) ? (
-                      <button className='group-btn member-btn'>Member</button>
-                    ) : (
-                      <button className='group-btn join-btn' onClick={() => handleJoinGroup(item?._id)}>Join</button>
-                    )
-                }
+            <div className='col-6 col-ms-6 col-md-4 col-lg-3 bd-left'>
+              <div className="group" key={"oth" + idx}>
+                <div className='group-logo'>
+                  <img src={item.chatLogo} alt="" />
+                </div>
+                <div>
+                  <h5 className="group-title">{item.chatName}</h5>
+                </div>
+                <div>
+                  {
+                    item.createdBy === userData._id ? (
+                      <button className='group-btn member-btn'>Admin</button>
+                    ) :
+                      inUserList.includes(userData._id) ? (
+                        <button className='group-btn member-btn'>Member</button>
+                      ) : (
+                        <button className='group-btn join-btn' onClick={() => handleJoinGroup(item?._id)}>Join</button>
+                      )
+                  }
+                </div>
               </div>
             </div>
           );
@@ -96,15 +98,17 @@ const MyGroupList = ({ ...props }) => {
       {
         invitationList.map((item, idx) => {
           return (
-            <div className="group" key={"invite" + idx}>
-              <div className='group-logo'>
-                <img src={item.groupId?.chatLogo} alt="" />
-              </div>
-              <div>
-                <h5 className="group-title">{item.groupId?.chatName}</h5>
-              </div>
-              <div>
-                <button className='group-btn join-btn' onClick={() => handleJoinGroup(item.groupId?._id)}>Join</button>
+            <div className='col-6 col-ms-6 col-md-4 col-lg-3 bd-left'>
+              <div className="group" key={"invite" + idx}>
+                <div className='group-logo'>
+                  <img src={item.groupId?.chatLogo} alt="" />
+                </div>
+                <div>
+                  <h5 className="group-title">{item.groupId?.chatName}</h5>
+                </div>
+                <div>
+                  <button className='group-btn join-btn' onClick={() => handleJoinGroup(item.groupId?._id)}>Join</button>
+                </div>
               </div>
             </div>
           );

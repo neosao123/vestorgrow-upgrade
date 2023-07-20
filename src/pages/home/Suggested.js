@@ -75,12 +75,12 @@ function Suggested() {
     try {
       let resp = await followerServ.sendFollowReq({ followingId: id });
       return resp.data;
-    } catch (err) {}
+    } catch (err) { }
   };
 
   return (
     <>
-      <div className="suggestionBox">
+      <div className="suggestionBox mb-3">
         <div className="suggestionHead">
           <span>Suggested for You</span>
           <span
@@ -97,13 +97,13 @@ function Suggested() {
             return (
               <>
                 <div className="profileBox">
+                  <img
+                    src="/images/icons/close.svg"
+                    className="suggestClose"
+                    alt="close"
+                    onClick={() => deleteSuggestedHome(user._id)}
+                  />
                   <Link to={"/userprofile/" + user?._id}>
-                    <img
-                      src="/images/icons/close.svg"
-                      className="suggestClose"
-                      alt="close"
-                      onClick={() => deleteSuggestedHome(user._id)}
-                    />
                     <img
                       src={
                         user?.profile_img
@@ -181,7 +181,7 @@ function Suggested() {
             />
           </div>
         </Modal.Header>
-        <Modal.Header className="button-header" style={{ borderBottom: "0" }}>
+        <div className="button-header hscroll" style={{ borderBottom: "0" }}>
           {suggestTabBtn.map((tab) => {
             return (
               <>
@@ -195,11 +195,10 @@ function Suggested() {
               </>
             );
           })}
-        </Modal.Header>
+        </div>
         <Modal.Body>
           <div
             className="suggestionModalBody"
-            style={{ overflowY: loading ? "hidden" : "scroll" }}
           >
             {loading ? (
               // Display loader while loading is true
@@ -209,64 +208,69 @@ function Suggested() {
             ) : filteredSuggested?.length === 0 ? (
               "No users Found"
             ) : (
-              filteredSuggested?.map((user) => {
-                return (
-                  <>
-                    <div className="profileBox">
-                      <Link to={"/userprofile/" + user?._id}>
-                        <div className="profile-image">
-                          <img
-                            src={
-                              user?.profile_img
-                                ? user.profile_img
-                                : "/images/profile/default-profile.png"
-                            }
-                            alt="profile"
-                          />
+              <div className="row">
+                {
+                  filteredSuggested?.map((user) => {
+                    return (
+                      <div className="col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+                        <div className="profileBox">
+                          <Link to={"/userprofile/" + user?._id}>
+                            <div className="profile-image">
+                              <img
+                                src={
+                                  user?.profile_img
+                                    ? user.profile_img
+                                    : "/images/profile/default-profile.png"
+                                }
+                                alt="profile"
+                              />
+                            </div>
+                            <div className="profile-content">
+                              <span className="name">
+                                {user?.user_name?.length > 18
+                                  ? user?.user_name?.slice(0, 18) + "..."
+                                  : user.user_name}
+                              </span>
+                              <span className="title">
+                                {user?.title !== "" ? user?.title?.length > 18
+                                  ? user?.title?.slice(0, 18) + "..."
+                                  : user.title : ""}
+                              </span>
+                              <span className="followers">
+                                {user.followers} Followers
+                              </span>
+                            </div>
+                          </Link>
+                          <div className="suggst-btns">
+                            <button
+                              className="skip"
+                              onClick={() => deleteSuggested(user._id)}
+                            >
+                              Skip
+                            </button>
+                            {user.isFollowing === "following" ? (
+                              <button className="follow">Following</button>
+                            ) : user.isFollowing === "requested" ? (
+                              <button className="follow">Requested</button>
+                            ) : (
+                              <button
+                                className="follow"
+                                onClick={() => {
+                                  handleFollowRequest(user._id);
+                                }}
+                              >
+                                Follow
+                              </button>
+                            )}
+                          </div>
                         </div>
-                        <div className="profile-content">
-                          <span className="name">
-                            {user?.user_name?.length > 18
-                              ? user?.user_name?.slice(0, 18) + "..."
-                              : user.user_name}
-                          </span>
-                          <span className="title">
-                            {user?.title?.length > 18
-                              ? user?.title?.slice(0, 18) + "..."
-                              : user.title}
-                          </span>
-                          <span className="followers">
-                            {user.followers} Followers
-                          </span>
-                        </div>
-                      </Link>
-                      <div className="suggst-btns">
-                        <button
-                          className="skip"
-                          onClick={() => deleteSuggested(user._id)}
-                        >
-                          Skip
-                        </button>
-                        {user.isFollowing === "following" ? (
-                          <button className="follow">Following</button>
-                        ) : user.isFollowing === "requested" ? (
-                          <button className="follow">Requested</button>
-                        ) : (
-                          <button
-                            className="follow"
-                            onClick={() => {
-                              handleFollowRequest(user._id);
-                            }}
-                          >
-                            Follow
-                          </button>
-                        )}
                       </div>
-                    </div>
-                  </>
-                );
-              })
-            )}
+                    );
+                  })
+                }
+              </div>
+            )
+            }
           </div>
         </Modal.Body>
       </Modal>

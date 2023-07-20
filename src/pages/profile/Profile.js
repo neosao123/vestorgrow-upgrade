@@ -3,6 +3,7 @@ import GlobalContext from "../../context/GlobalContext";
 import ProfileImage from "../../shared/ProfileImage";
 import PostService from "../../services/postService";
 import UserService from "../../services/UserService";
+import HelperFunctions from "../../services/helperFunctions";
 import EditProfile from "../../popups/profile/EditProfile";
 import DetailAbout from "../../popups/about/DetailAbout";
 import EditAbout from "../../popups/about/EditAbout";
@@ -22,7 +23,7 @@ import { Link } from "react-router-dom";
 import UserSharedPost from "../../popups/post/UserSharedPost";
 import './profile.css';
 import UserLikedPost from "../../popups/post/UserLikedPost";
-
+import AllSuggestions from "./AllSuggestions";
 
 const isImage = ["gif", "jpg", "jpeg", "png", "svg", "HEIC", "heic", "webp", "jfif", "pjpeg", "pjp", "avif", "apng"];
 
@@ -30,8 +31,9 @@ const Profile = () => {
 
     const userServ = new UserService();
     const postServ = new PostService();
-    const globalCtx = useContext(GlobalContext);
+    const helperServ = new HelperFunctions();
 
+    const globalCtx = useContext(GlobalContext);
     const [user, setUser] = globalCtx.user;
 
     const [postList, setPostList] = useState([]);
@@ -58,6 +60,7 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState("about");
 
     const [suggestedUsers, setSuggestedUsers] = useState([]);
+    const [showSuggestedProfiles, setShowSuggestedProfiles] = useState(false);
 
     const getPostList = async () => {
         const obj = { filter: {} };
@@ -252,6 +255,10 @@ const Profile = () => {
         }
     }
 
+    const closeSuggestionModal = () => {
+        setShowSuggestedProfiles(!showSuggestedProfiles);
+    }
+
     useEffect(() => {
         getPostList();
         getUserData();
@@ -439,7 +446,7 @@ const Profile = () => {
                                     <div className="card-body">
                                         <div className="suggested-header">
                                             <h6 className="card-title">Suggested for you</h6>
-                                            <div className="see-all-link">See All</div>
+                                            <div className="see-all-link" onClick={() => setShowSuggestedProfiles(!showSuggestedProfiles)}>See All</div>
                                         </div>
                                         <div>
                                             {
@@ -479,6 +486,7 @@ const Profile = () => {
                             {
                                 postList && postList.map((item, idx) => {
                                     const postReactions = item.postReactions ?? [];
+                                    const youtubeUrl = helperServ.extractYouTubeURL(item.message);
                                     return (
                                         <div key={idx} className="col-sm-4 col-lg-4 dynamic-width-custom">
                                             <div className="bgWhiteCard feedBox post_box">
@@ -558,23 +566,27 @@ const Profile = () => {
                                                     ) : (
                                                         <div className="postImg mx_minus postImg-custom-profile">
                                                             {
-                                                                (matchYoutubeUrl(item.message)) ? (
+                                                                youtubeUrl ? (
                                                                     <div style={{ width: "100%" }}>
-                                                                        <Playeryoutube url={item.message} height={"260px"} corners={false} />
-                                                                    </div>) : (
-                                                                    <div className="profile-post-image-text" style={{ padding: '25px' }} onClick={() => handlePostPopup(item._id, idx)}>
+                                                                        <Playeryoutube url={youtubeUrl} height={"260px"} corners={false} />
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="profile-post-image-text" style={{ padding: '25px' }}>
                                                                         <div className="mb-0 profile-post-image-inner-text" dangerouslySetInnerHTML={{ __html: item.message.length > 320 ? item.message.slice(0, 320) + "..." : item.message }} />
                                                                     </div>
                                                                 )
                                                             }
                                                         </div>
                                                     )}
+                                                    <div className="postTxt" onClick={() => handlePostPopup(item._id, idx)}>
+                                                        <p className="mb-0 postcontent postcontent-custom" dangerouslySetInnerHTML={{ __html: item.message.slice(0, 85) }} />
+                                                    </div>
                                                     <div className="likeShareIconCounter">
                                                         <ul className="nav">
                                                             <li className="nav-item">
                                                                 {
                                                                     item.likeCount > 0 ? (
-                                                                        <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(item?._id)}>
+                                                                        <div className={"d-flex align-items-center"} onClick={() => setShowUserLikedPost(item._id)}>
                                                                             <div className="floating-reactions-container">
                                                                                 {
                                                                                     postReactions.includes("like") && <span><img src="/images/icons/filled-thumbs-up.svg" alt="filled-thumbs-up" /></span>
@@ -591,7 +603,7 @@ const Profile = () => {
                                                                     ) : (
                                                                         <Link
                                                                             className="nav-link feedUnlike feedCustom"
-                                                                            onClick={() => likePost(item._id)}
+                                                                            onClick={() => setShowUserLikedPost(item._id)}
                                                                         >
                                                                             <img src="/images/icons/like.svg" alt="like" className="img-fluid" />
                                                                             <span className="mx-2">{item?.likeCount}</span>
@@ -600,7 +612,7 @@ const Profile = () => {
                                                                 }
                                                             </li>
                                                             <li className="nav-item">
-                                                                <Link className="nav-link" onClick={() => handleShowComment(item._id)}>
+                                                                <Link className="nav-link" onClick={() => handlePostPopup(item._id, idx)}>
                                                                     <img src="/images/icons/comment.svg" alt="comment" className="img-fluid" />
                                                                     <span className="mx-2">{item?.commentCount}</span>
                                                                 </Link>
@@ -624,10 +636,9 @@ const Profile = () => {
                             }
                         </div>
                     </div>
-
                     <div className={activeTab === "groups" ? "tab-pane active" : "tab-pane"} id="groups">
                         <div className="row g-2">
-                            <div className="col-sm-12 col-md-7 col-lg-8">
+                            <div className="col-sm-12 col-md-8 col-lg-8">
                                 <div className="card border-0">
                                     <div className="card-body">
                                         <h6 className="card-section-title">Groups</h6>
@@ -639,12 +650,12 @@ const Profile = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-sm-12 col-md-5 col-lg-4">
+                            <div className="col-sm-12 col-md-4 col-lg-4">
                                 <div className="card border-0">
                                     <div className="card-body">
                                         <div className="suggested-header">
                                             <h6 className="card-title">Suggested for you</h6>
-                                            <div className="see-all-link">See All</div>
+                                            <div className="see-all-link" onClick={() => setShowSuggestedProfiles(!showSuggestedProfiles)}>See All</div>
                                         </div>
                                         <div>
                                             {
@@ -751,6 +762,12 @@ const Profile = () => {
                     postId={showUserLikedPost}
                 />
             )}
+
+            {
+                showSuggestedProfiles && (
+                    <AllSuggestions showModal={true} closeSuggestionModal={closeSuggestionModal} />
+                )
+            }
         </div>
     )
 }
