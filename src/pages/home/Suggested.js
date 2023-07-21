@@ -61,12 +61,17 @@ function Suggested() {
 
   const handleClick = async (newCategory) => {
     setCategory(newCategory);
+    setSearch("");
     setTabRequest({ tab: newCategory });
   };
 
   const handleSearch = async (e) => {
-    setSearch(e.target.value);
+    const newSearch = await e.target.value;
+    setSearch(newSearch);
+    setTabRequest({ searchText: newSearch, tab: category });
+    getSuggestedTab();
   };
+
   const filteredSuggested = suggestedTab.filter((user) => {
     return user?.user_name.toString().toLowerCase().includes(search);
   });
@@ -75,7 +80,7 @@ function Suggested() {
     try {
       let resp = await followerServ.sendFollowReq({ followingId: id });
       return resp.data;
-    } catch (err) { }
+    } catch (err) {}
   };
 
   return (
@@ -174,10 +179,10 @@ function Suggested() {
             />
             <input
               type="text"
-              className="form-control"
               placeholder="Search"
               name="search"
               onChange={handleSearch}
+              value={search}
             />
           </div>
         </Modal.Header>
@@ -197,9 +202,7 @@ function Suggested() {
           })}
         </div>
         <Modal.Body>
-          <div
-            className="suggestionModalBody"
-          >
+          <div className="suggestionModalBody">
             {loading ? (
               // Display loader while loading is true
               <div className="suggest-load">
@@ -209,68 +212,67 @@ function Suggested() {
               "No users Found"
             ) : (
               <div className="row">
-                {
-                  filteredSuggested?.map((user) => {
-                    return (
-                      <div className="col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
-                        <div className="profileBox">
-                          <Link to={"/userprofile/" + user?._id}>
-                            <div className="profile-image">
-                              <img
-                                src={
-                                  user?.profile_img
-                                    ? user.profile_img
-                                    : "/images/profile/default-profile.png"
-                                }
-                                alt="profile"
-                              />
-                            </div>
-                            <div className="profile-content">
-                              <span className="name">
-                                {user?.user_name?.length > 18
-                                  ? user?.user_name?.slice(0, 18) + "..."
-                                  : user.user_name}
-                              </span>
-                              <span className="title">
-                                {user?.title !== "" ? user?.title?.length > 18
-                                  ? user?.title?.slice(0, 18) + "..."
-                                  : user.title : ""}
-                              </span>
-                              <span className="followers">
-                                {user.followers} Followers
-                              </span>
-                            </div>
-                          </Link>
-                          <div className="suggst-btns">
-                            <button
-                              className="skip"
-                              onClick={() => deleteSuggested(user._id)}
-                            >
-                              Skip
-                            </button>
-                            {user.isFollowing === "following" ? (
-                              <button className="follow">Following</button>
-                            ) : user.isFollowing === "requested" ? (
-                              <button className="follow">Requested</button>
-                            ) : (
-                              <button
-                                className="follow"
-                                onClick={() => {
-                                  handleFollowRequest(user._id);
-                                }}
-                              >
-                                Follow
-                              </button>
-                            )}
+                {filteredSuggested?.slice(0, 2).map((user) => {
+                  return (
+                    <div className="col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+                      <div className="profileBox">
+                        <Link to={"/userprofile/" + user?._id}>
+                          <div className="profile-image">
+                            <img
+                              src={
+                                user?.profile_img
+                                  ? user.profile_img
+                                  : "/images/profile/default-profile.png"
+                              }
+                              alt="profile"
+                            />
                           </div>
+                          <div className="profile-content">
+                            <span className="name">
+                              {user?.user_name?.length > 18
+                                ? user?.user_name?.slice(0, 18) + "..."
+                                : user.user_name}
+                            </span>
+                            <span className="title">
+                              {user?.title !== ""
+                                ? user?.title?.length > 18
+                                  ? user?.title?.slice(0, 18) + "..."
+                                  : user.title
+                                : ""}
+                            </span>
+                            <span className="followers">
+                              {user.followers} Followers
+                            </span>
+                          </div>
+                        </Link>
+                        <div className="suggst-btns">
+                          <button
+                            className="skip"
+                            onClick={() => deleteSuggested(user._id)}
+                          >
+                            Skip
+                          </button>
+                          {user.isFollowing === "following" ? (
+                            <button className="follow">Following</button>
+                          ) : user.isFollowing === "requested" ? (
+                            <button className="follow">Requested</button>
+                          ) : (
+                            <button
+                              className="follow"
+                              onClick={() => {
+                                handleFollowRequest(user._id);
+                              }}
+                            >
+                              Follow
+                            </button>
+                          )}
                         </div>
                       </div>
-                    );
-                  })
-                }
+                    </div>
+                  );
+                })}
               </div>
-            )
-            }
+            )}
           </div>
         </Modal.Body>
       </Modal>
